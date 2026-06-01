@@ -2042,60 +2042,60 @@
                                     <span class="flip-stat">6–12 mo</span>
                                 </div>
                                 <div class="flip-icon">⏱️</div>
-                                <div class="flip-text">Months from idea to first production model</div>
+                                <div class="flip-text">Months building infra before training a single model</div>
                                 <div class="flip-hint">tap to flip</div>
                             </div>
                             <div class="flip-face flip-solution">
                                 <div class="flip-top">
                                     <span class="flip-label">With Kubeflow</span>
-                                    <span class="flip-stat">10× faster</span>
+                                    <span class="flip-stat">ship faster</span>
                                 </div>
                                 <div class="flip-icon">⚡</div>
-                                <div class="flip-text">Days from raw data to deployed model</div>
+                                <div class="flip-text">Infrastructure ready in days — spend time on models, not tooling</div>
                             </div>
                         </div>
                     </div>
-                    <!-- Card 2: Collaboration -->
+                    <!-- Card 2: Reproducibility -->
                     <div class="flip-card" style="--enter-delay:0.22s; --flip-delay:0.15s;" onclick="flipCard(this)">
                         <div class="flip-inner">
                             <div class="flip-face flip-problem">
                                 <div class="flip-top">
                                     <span class="flip-label">The Pain</span>
-                                    <span class="flip-stat">N × effort</span>
+                                    <span class="flip-stat">not reproducible</span>
                                 </div>
                                 <div class="flip-icon">🔁</div>
-                                <div class="flip-text">Every team rebuilds the same infrastructure</div>
+                                <div class="flip-text">"Works on my machine" — experiments can't be shared or reproduced</div>
                                 <div class="flip-hint">tap to flip</div>
                             </div>
                             <div class="flip-face flip-solution">
                                 <div class="flip-top">
                                     <span class="flip-label">With Kubeflow</span>
-                                    <span class="flip-stat">1 platform</span>
+                                    <span class="flip-stat">fully reproducible</span>
                                 </div>
                                 <div class="flip-icon">🤝</div>
-                                <div class="flip-text">One shared platform for every team in the org</div>
+                                <div class="flip-text">Every run tracked, shareable, and reproducible by anyone on the team</div>
                             </div>
                         </div>
                     </div>
-                    <!-- Card 3: Governance -->
+                    <!-- Card 3: Lineage -->
                     <div class="flip-card" style="--enter-delay:0.34s; --flip-delay:0.3s;" onclick="flipCard(this)">
                         <div class="flip-inner">
                             <div class="flip-face flip-problem">
                                 <div class="flip-top">
                                     <span class="flip-label">The Pain</span>
-                                    <span class="flip-stat">0% audit</span>
+                                    <span class="flip-stat">no history</span>
                                 </div>
                                 <div class="flip-icon">🔍</div>
-                                <div class="flip-text">No governance — can't audit what's live</div>
+                                <div class="flip-text">No record of what data or code produced the model in production</div>
                                 <div class="flip-hint">tap to flip</div>
                             </div>
                             <div class="flip-face flip-solution">
                                 <div class="flip-top">
                                     <span class="flip-label">With Kubeflow</span>
-                                    <span class="flip-stat">100% trail</span>
+                                    <span class="flip-stat">full lineage</span>
                                 </div>
                                 <div class="flip-icon">📋</div>
-                                <div class="flip-text">Full audit trail, lineage &amp; compliance built in</div>
+                                <div class="flip-text">Complete history of every model — data, code, config, and which pipeline version produced it</div>
                             </div>
                         </div>
                     </div>
@@ -2108,7 +2108,7 @@
                                     <span class="flip-stat">lock-in</span>
                                 </div>
                                 <div class="flip-icon">🔒</div>
-                                <div class="flip-text">Vendor lock-in with every new tool you adopt</div>
+                                <div class="flip-text">Proprietary ML platforms that own your workflows and data</div>
                                 <div class="flip-hint">tap to flip</div>
                             </div>
                             <div class="flip-face flip-solution">
@@ -2117,7 +2117,7 @@
                                     <span class="flip-stat">0 lock-in</span>
                                 </div>
                                 <div class="flip-icon">🌐</div>
-                                <div class="flip-text">100% open source — CNCF, zero vendor lock-in</div>
+                                <div class="flip-text">100% open source CNCF project — runs on any Kubernetes: on-prem, AWS, GCP, Azure</div>
                             </div>
                         </div>
                     </div>
@@ -2139,13 +2139,13 @@
             <div class="slide-content" style="max-width: 900px;">
                 <span class="slide-badge">THE PLATFORM</span>
                 <h2 class="slide-title">One Platform, <span class="gradient">Five Phases</span></h2>
-                <p class="slide-text">From raw data to live production — every phase covered.</p>
+                <p class="slide-text">From raw data to live production.</p>
 
                 <div class="lifecycle-row">
                     <div class="lifecycle-stage" style="--stage-color:#F57C00; --delay:0s;">
                         <div class="stage-arrow">⚙️</div>
                         <div class="stage-name">PREPARE</div>
-                        <div class="stage-desc">Spark + Feast</div>
+                        <div class="stage-desc">Spark Operator</div>
                     </div>
                     <div class="lifecycle-connector">→</div>
                     <div class="lifecycle-stage" style="--stage-color:#9C27B0; --delay:1s;">
@@ -2162,7 +2162,7 @@
                     <div class="lifecycle-connector">→</div>
                     <div class="lifecycle-stage" style="--stage-color:#388E3C; --delay:3s;">
                         <div class="stage-arrow">📦</div>
-                        <div class="stage-name">GOVERN</div>
+                        <div class="stage-name">GOVERN MODELS</div>
                         <div class="stage-desc">Model Registry</div>
                     </div>
                     <div class="lifecycle-connector">→</div>
@@ -2183,13 +2183,13 @@
 
                 <div class="kubeflow-row">
                     <div class="kf-component" style="--kf-color:#F57C00; --delay:0s;">
-                        <div class="kf-icon">⚡🏪</div>
-                        <div class="kf-name">SPARK + FEAST</div>
-                        <div class="kf-desc">ETL &amp; Feature Store</div>
+                        <div class="kf-icon">⚡</div>
+                        <div class="kf-name">SPARK OPERATOR</div>
+                        <div class="kf-desc">Data processing jobs</div>
                     </div>
                     <div class="kf-component" style="--kf-color:#9C27B0; --delay:1s;">
                         <div class="kf-icon">📓</div>
-                        <div class="kf-name">NOTEBOOKS</div>
+                        <div class="kf-name">KF NOTEBOOKS</div>
                         <div class="kf-desc">Dev environments</div>
                     </div>
                     <div class="kf-component" style="--kf-color:#E64A19; --delay:2s;">
@@ -2199,8 +2199,8 @@
                     </div>
                     <div class="kf-component" style="--kf-color:#388E3C; --delay:3s;">
                         <div class="kf-icon">📦</div>
-                        <div class="kf-name">REGISTRY</div>
-                        <div class="kf-desc">Model versioning</div>
+                        <div class="kf-name">MODEL REGISTRY</div>
+                        <div class="kf-desc">Lineage &amp; versioning</div>
                     </div>
                     <div class="kf-component" style="--kf-color:#0277BD; --delay:4s;">
                         <div class="kf-icon">🌐</div>
@@ -2229,28 +2229,28 @@
                 <span class="slide-badge">PHASE 1</span>
                 <h2 class="slide-title">Prepare Your <span class="gradient">Data</span></h2>
                 <p class="slide-text">
-                    Process any data at scale and build a <strong>shared feature store</strong> — consistent from training to live serving.
+                    Run scalable data processing on Kubernetes and build a <strong>consistent feature pipeline</strong> — from raw sources to training-ready datasets.
                 </p>
                 <div class="feature-list">
                     <div class="feature-item" style="border-left-color: #FF9800;">
                         <span class="feature-emoji">⚡</span>
                         <div class="feature-text">
-                            <h4>Apache Spark — ETL at Scale</h4>
-                            <p>Process petabytes of raw data with distributed Spark jobs — no infrastructure setup needed.</p>
+                            <h4>Kubeflow Spark Operator</h4>
+                            <p>An official Kubeflow sub-project. Runs distributed Spark jobs on Kubernetes — load, clean, and transform data at any scale.</p>
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #4ECDC4;">
                         <span class="feature-emoji">🏪</span>
                         <div class="feature-text">
-                            <h4>Feast Feature Store</h4>
-                            <p>One consistent feature definition used by both training and serving — eliminates training-serving skew.</p>
+                            <h4>Feast (Ecosystem Integration)</h4>
+                            <p>Not a Kubeflow component — but a popular open-source feature store that works alongside Kubeflow Pipelines to keep training and serving features in sync.</p>
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #81C784;">
                         <span class="feature-emoji">🔒</span>
                         <div class="feature-text">
-                            <h4>Governed &amp; Versioned</h4>
-                            <p>Every dataset versioned with full lineage — know exactly which data trained every model.</p>
+                            <h4>Versioned &amp; Traceable</h4>
+                            <p>Every dataset snapshot is versioned with full lineage — always know exactly which data trained which model.</p>
                         </div>
                     </div>
                 </div>
@@ -2272,8 +2272,8 @@
                     <div class="feature-item" style="border-left-color: #9C27B0;">
                         <span class="feature-emoji">💻</span>
                         <div class="feature-text">
-                            <h4>Your IDE, on the Cluster</h4>
-                            <p>JupyterLab, VSCode, or RStudio — with full cluster compute and GPU access instantly.</p>
+                            <h4>JupyterLab or VSCode — Your Choice</h4>
+                            <p>Spin up a notebook server with full GPU access instantly. Kubeflow Notebooks v2 supports JupyterLab, VSCode, and custom images.</p>
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #9C27B0;">
@@ -2284,10 +2284,10 @@
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #9C27B0;">
-                        <span class="feature-emoji">🤝</span>
+                        <span class="feature-emoji">🏢</span>
                         <div class="feature-text">
-                            <h4>Team Collaboration</h4>
-                            <p>Share notebooks and datasets across the team with built-in access control.</p>
+                            <h4>Multi-Team, One Cluster</h4>
+                            <p>Kubeflow Profiles give each team their own isolated namespace on a shared cluster — no infrastructure per team.</p>
                         </div>
                     </div>
                 </div>
@@ -2303,7 +2303,7 @@
                 <span class="slide-badge">PHASE 3</span>
                 <h2 class="slide-title">Train &amp; <span class="gradient">Optimize</span></h2>
                 <p class="slide-text">
-                    Fine-tune any model on your data — <strong>1 GPU to 1,000s</strong>, same code. AutoML finds the best config automatically.
+                    Fine-tune LLMs or train custom models — <strong>1 GPU to thousands</strong>, same code. LoRA, QLoRA, and AutoML built in.
                 </p>
                 <div class="gpu-activity">
                     <div class="gpu-card"><div class="gpu-label">GPU 0</div><div class="gpu-bar"><div class="gpu-fill" style="animation-delay:0s;"></div></div></div>
@@ -2340,9 +2340,9 @@
                     📦
                 </div>
                 <span class="slide-badge">PHASE 4</span>
-                <h2 class="slide-title">Govern Every <span class="gradient">Model</span></h2>
+                <h2 class="slide-title">Track Every <span class="gradient">Model</span></h2>
                 <p class="slide-text">
-                    Know exactly what is in production, who approved it, and why — <strong>full audit trail</strong> built in.
+                    Know exactly what shipped, who trained it, and on what data — <strong>full history</strong> built in for research and production alike.
                 </p>
                 <div class="feature-list">
                     <div class="feature-item" style="border-left-color: #4CAF50;">
@@ -2355,15 +2355,15 @@
                     <div class="feature-item" style="border-left-color: #4CAF50;">
                         <span class="feature-emoji">🔍</span>
                         <div class="feature-text">
-                            <h4>Compliance &amp; Audit Trail</h4>
-                            <p>Approval workflows and immutable run history — meet regulatory requirements without extra tooling.</p>
+                            <h4>Audit Trail &amp; Lineage</h4>
+                            <p>Trace exactly which data and code produced a model — essential for research reproducibility and compliance.</p>
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #4CAF50;">
                         <span class="feature-emoji">🔁</span>
                         <div class="feature-text">
-                            <h4>Full Reproducibility</h4>
-                            <p>Trace exactly which data, code, and configuration produced any model — reproduce any result on demand.</p>
+                            <h4>Discover &amp; Reuse</h4>
+                            <p>Teams can browse registered models, compare versions, and promote a model from experiment to production — all from the Kubeflow Dashboard.</p>
                         </div>
                     </div>
                 </div>
@@ -2391,7 +2391,7 @@
                     <div class="terminal-body">
                         <div class="terminal-line">
                             <span class="terminal-prompt">$ </span>
-                            <span class="terminal-cmd">kserve deploy --model llama-finetune-v2</span>
+                            <span class="terminal-cmd">kubectl apply -f inference-service.yaml</span>
                         </div>
                         <div class="terminal-line">
                             <span class="terminal-output">✓ InferenceService created</span>
@@ -2419,7 +2419,7 @@
                 <span class="slide-badge">ORCHESTRATION</span>
                 <h2 class="slide-title">Automate <span class="gradient">Everything</span></h2>
                 <p class="slide-text">
-                    Define the full AI lifecycle as code — <strong>once</strong>. Pipelines runs it automatically, every time.
+                    Kubeflow Pipelines ties all five phases together into a <strong>single, repeatable workflow</strong> — defined once as Python code.
                 </p>
                 <div class="feature-list">
                     <div class="feature-item" style="border-left-color: #42A5F5;">
@@ -2432,15 +2432,15 @@
                     <div class="feature-item" style="border-left-color: #42A5F5;">
                         <span class="feature-emoji">⚡</span>
                         <div class="feature-text">
-                            <h4>Smart Caching</h4>
-                            <p>Steps that haven't changed are skipped automatically — cut re-run costs by up to 80%.</p>
+                            <h4>Step Caching</h4>
+                            <p>Steps that haven't changed are automatically skipped — KFP's step caching means you only rerun what's new.</p>
                         </div>
                     </div>
                     <div class="feature-item" style="border-left-color: #42A5F5;">
                         <span class="feature-emoji">📜</span>
                         <div class="feature-text">
                             <h4>Full Run History</h4>
-                            <p>Every execution logged with inputs, outputs, and timing — complete operational audit trail.</p>
+                            <p>Every execution logged with inputs, outputs, parameters, and timing — complete lineage for every pipeline run.</p>
                         </div>
                     </div>
                 </div>
@@ -2453,9 +2453,9 @@
                 <div class="slide-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">
                     ☸️
                 </div>
-                <h2 class="slide-title">Explore the <span class="gradient">Full Platform</span></h2>
+                <h2 class="slide-title">You're Part of <span class="gradient">Something Bigger</span></h2>
                 <p class="slide-text">
-                    See the complete architecture — select your role to find what matters to you.
+                    Kubeflow is built by a global open-source community — CNCF project, runs on any Kubernetes cluster. Everything you just saw is accessible through the <strong>Kubeflow Central Dashboard</strong>, one unified UI.
                 </p>
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -2476,15 +2476,18 @@
                     </div>
                 </div>
                 <div class="cta-buttons">
-                    <a href="index.html" class="cta-btn primary">
+                    <a href="/" class="cta-btn primary">
                         🗺️ Full Architecture View
+                    </a>
+                    <a href="https://www.kubeflow.org/docs/about/community/" target="_blank" rel="noopener noreferrer" class="cta-btn primary" style="background: linear-gradient(135deg,#7B68EE,#9C27B0);">
+                        🤝 Community
                     </a>
                     <a href="https://www.kubeflow.org/docs" class="cta-btn outline">
                         📖 Documentation
                     </a>
                 </div>
                 <p style="color: var(--accent); font-size: 0.95rem; margin-top: 25px;">
-                    CNCF Incubating · Apache Spark · Feast · Open Source
+                    CNCF Incubating · Open Source · Community-driven
                 </p>
             </div>
         </div>
@@ -2520,15 +2523,15 @@
         // Guide messages for each slide
         const guideMessages = {
             0: null,
-            1: "Hey! 👋 I'm <strong>Kube</strong>, your guide. Most teams waste <span class='highlight'>6–12 months</span> on AI infrastructure before writing a single model. Kubeflow changes that.",
-            2: "This is the full lifecycle — notice <strong>Spark + Feast</strong> at the start! Most platforms skip the data preparation phase. We don't.",
-            3: "⚡ <strong>Spark + Feast</strong> is the secret weapon. Training-serving skew is one of the top reasons models fail in production — Feast eliminates it.",
-            4: "No more waiting for IT! 🧑‍🔬 Data scientists get <span class='highlight'>GPU-backed environments in seconds</span> — and everything is reproducible across the team.",
-            5: "Watch those GPUs go! 🚀 <strong>Same Python code</strong>, whether you're running on 1 GPU or 1,000. Kubeflow Trainer handles all the distributed magic.",
-            6: "This is what keeps compliance teams happy. 📋 Every model has a <span class='highlight'>complete audit trail</span> — who trained it, on what data, when, and why.",
-            7: "From registry to live endpoint in <strong>under 5 minutes</strong>. And if something goes wrong? One command to roll back. 🌐",
-            8: "Define it once, run it forever. 🔀 <strong>Kubeflow Pipelines</strong> stitches all five phases together — automated, cached, and fully audited.",
-            9: "Thanks for the tour! 🙏 Hit <strong>Full Architecture View</strong> to explore interactively by your role — or go straight to the docs to get started."
+            1: "Hey! 👋 I'm <strong>Kube</strong>, your tour guide. Most teams spend <em>months</em> assembling ML infrastructure before training a single model. Kubeflow gives you that infrastructure ready to go — on any Kubernetes cluster.",
+            2: "Here's the full picture — 5 steps from raw data to a live model. Each step has a dedicated Kubeflow component. <strong>Kubeflow Pipelines</strong> sits underneath all of them, stitching every step into one automated workflow.",
+            3: "⚡ <strong>Kubeflow Spark Operator</strong> is the official sub-project for data processing — runs distributed Spark jobs on Kubernetes. Feast is a popular open-source feature store you can run alongside Kubeflow, but it's not a built-in component.",
+            4: "No more waiting on IT! 🧑‍🔬 Data scientists spin up <em>GPU-backed JupyterLab or VSCode environments in seconds</em>. Kubeflow Profiles give each team their own isolated namespace — everyone shares the cluster, nothing collides.",
+            5: "🚀 <strong>Trainer v2</strong> (released mid-2025) is the big one — fine-tune LLMs like Llama or Qwen with built-in LoRA/QLoRA support, no training code required. Write normal Python or use a built-in runtime. Katib runs hyperparameter search in parallel.",
+            6: "📋 Every model gets a <em>complete history</em>: which data, which code, who ran it. Great for debugging, sharing results with the community, or meeting compliance requirements.",
+            7: "KServe creates an <strong>InferenceService</strong> on Kubernetes — your model gets a REST and gRPC endpoint, auto-scales to zero when idle, and supports canary rollouts so you can test a new version on a small slice of traffic before going all-in. 🌐",
+            8: "Define your entire workflow once as code — then <strong>share it</strong>. 🔀 Pipelines is how the community shares and reuses complete ML workflows, not just models.",
+            9: "That's the full picture! 🙏 Explore the architecture diagram, browse the docs, or come say hi in the community — we'd love to have you."
         };
 
         let guideHiddenForSlide = -1; // Track which slide the user closed dialog on
