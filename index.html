@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kubeflow — What Can It Do For You?</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+            background: linear-gradient(-45deg, #0a0a18, #1a1a3e, #12122a, #251a45);
+            background-size: 400% 400%;
+            animation: bgShift 20s ease infinite;
             min-height: 100vh; padding: 24px; color: #e0e0e0; overflow-x: hidden;
+        }
+        @keyframes bgShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* grid mesh overlay — matches tour atmosphere */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,107,53,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,53,0.035) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
         /* ── Background ─────────────────────────────── */
@@ -73,6 +86,12 @@
             animation: titleGlow 2s ease-in-out infinite;
         }
         @keyframes titleGlow { 0%,100% { box-shadow: 0 0 5px #FF6B35; } 50% { box-shadow: 0 0 15px #FF6B35, 0 0 30px #FF6B35; } }
+        .panel-title.clr-blue   { color: #64B5F6; }
+        .panel-title.clr-blue::before   { background: linear-gradient(180deg,#64B5F6,#90CAF9); }
+        .panel-title.clr-purple { color: #CE93D8; }
+        .panel-title.clr-purple::before { background: linear-gradient(180deg,#CE93D8,#E1BEE7); }
+        .panel-title.clr-green  { color: #81C784; }
+        .panel-title.clr-green::before  { background: linear-gradient(180deg,#81C784,#A5D6A7); }
 
         /* ── Persona Selector ───────────────────────── */
         .persona-hint { font-size: 0.73rem; color: #666; margin-bottom: 14px; line-height: 1.4; position: relative; z-index: 1; }
@@ -157,10 +176,10 @@
 
         /* Hover hint */
         .hover-hint {
-            font-size: 0.65rem; color: #444; margin-top: 7px;
+            font-size: 0.65rem; color: #555; margin-top: 7px;
             display: flex; align-items: center; gap: 5px; transition: opacity 0.3s;
         }
-        .hover-hint::before { content: ''; width: 12px; height: 1px; background: #444; display: block; }
+        .hover-hint::before { content: ''; width: 12px; height: 1px; background: #555; display: block; }
         .stage:hover .hover-hint,
         .pipelines-bar:hover .hover-hint { opacity: 0; pointer-events: none; }
 
@@ -186,7 +205,7 @@
         .stage.s3 .stage-number { background: linear-gradient(135deg,#E64A19,#FF5722); }
         @keyframes trainingGlow { 0%,100% { box-shadow: 0 0 10px rgba(255,107,53,0.25); } 50% { box-shadow: 0 0 28px rgba(255,107,53,0.5), 0 0 55px rgba(255,107,53,0.2); } }
         .stage.s4 { border-color: #388E3C; } .stage.s4 .stage-number { background: linear-gradient(135deg,#388E3C,#4CAF50); }
-        .stage.s5 { border-color: #F57C00; } .stage.s5 .stage-number { background: linear-gradient(135deg,#F57C00,#FF9800); }
+        .stage.s5 { border-color: #0277BD; } .stage.s5 .stage-number { background: linear-gradient(135deg,#01579B,#0288D1); }
 
         /* Spark / Feast badges — revealed on hover */
         .data-sub { display: flex; gap: 8px; margin-top: 0; flex-wrap: wrap; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease; }
@@ -198,17 +217,17 @@
         /* Frameworks — hidden until hover reveals cap-block, then user can toggle */
         .fw-toggle {
             display: inline-flex; align-items: center; gap: 6px; margin-top: 11px;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            font-size: 0.72rem; color: #888; cursor: pointer; padding: 5px 10px;
+            background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);
+            opacity: 0; pointer-events: none; user-select: none;
+            transition: opacity 0.3s ease, color 0.2s, background 0.2s, border-color 0.2s;
         }
-        .stage:hover .fw-toggle { opacity: 1; pointer-events: auto; }
-        /* keep fw-toggle visible once open even if mouse moves slightly */
-        .fw-toggle.open { opacity: 1 !important; pointer-events: auto !important; }
-        .fw-toggle { font-size: 0.72rem; color: #888; cursor: pointer; padding: 5px 10px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; user-select: none; }
         .fw-toggle:hover { color: #fff; background: rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.3); }
-        
+        .stage:hover .fw-toggle { opacity: 1; pointer-events: auto; }
+        .fw-toggle.open { opacity: 1 !important; pointer-events: auto !important; }
         .fw-toggle .arrow { transition: transform 0.3s; font-size: 0.6rem; }
         .fw-toggle.open .arrow { transform: rotate(90deg); }
-        .frameworks-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-top: 10px; display: none; }
+        .frameworks-grid { display: none; grid-template-columns: repeat(4,1fr); gap: 7px; margin-top: 10px; }
         .frameworks-grid.open { display: grid; }
         .framework { display: flex; flex-direction: column; align-items: center; padding: 9px; background: rgba(30,30,50,0.8); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.68rem; font-weight: 600; color: #fff; transition: all 0.3s; cursor: pointer; }
         .framework:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
@@ -241,6 +260,7 @@
             display: flex; align-items: flex-start; gap: 14px;
             animation: pipelinesGlow 3s ease-in-out infinite; transition: opacity 0.35s, filter 0.35s;
         }
+        .pipelines-bar:hover { transform: scale(1.005); box-shadow: 0 4px 28px rgba(25,118,210,0.5); }
         .pipelines-bar.dimmed { opacity: 0.22; filter: grayscale(0.5); pointer-events: none; }
         .pipelines-bar.lit    { box-shadow: 0 0 22px rgba(25,118,210,0.35); }
         @keyframes pipelinesGlow { 0%,100% { box-shadow: 0 0 10px rgba(25,118,210,0.3); } 50% { box-shadow: 0 0 25px rgba(25,118,210,0.6), 0 0 50px rgba(25,118,210,0.2); } }
@@ -389,17 +409,17 @@
                     <div class="phase-item" style="border-left-color:#F57C00; animation-delay:0.05s;">
                         <div class="phase-dot" style="background:#F57C00;">1</div><span>Prepare Data</span>
                     </div>
-                    <div class="phase-item" style="border-left-color:#9C27B0; animation-delay:0.15s;">
-                        <div class="phase-dot" style="background:#9C27B0;">2</div><span>Experiment</span>
+                    <div class="phase-item" style="border-left-color:#7B1FA2; animation-delay:0.15s;">
+                        <div class="phase-dot" style="background:#7B1FA2;">2</div><span>Experiment</span>
                     </div>
-                    <div class="phase-item" style="border-left-color:#FF5722; animation-delay:0.25s;">
-                        <div class="phase-dot" style="background:#FF5722;">3</div><span>Train &amp; Optimize</span>
+                    <div class="phase-item" style="border-left-color:#E64A19; animation-delay:0.25s;">
+                        <div class="phase-dot" style="background:#E64A19;">3</div><span>Train &amp; Optimize</span>
                     </div>
-                    <div class="phase-item" style="border-left-color:#4CAF50; animation-delay:0.35s;">
-                        <div class="phase-dot" style="background:#4CAF50;">4</div><span>Govern Models</span>
+                    <div class="phase-item" style="border-left-color:#388E3C; animation-delay:0.35s;">
+                        <div class="phase-dot" style="background:#388E3C;">4</div><span>Govern Models</span>
                     </div>
-                    <div class="phase-item" style="border-left-color:#FF9800; animation-delay:0.45s;">
-                        <div class="phase-dot" style="background:#FF9800;">5</div><span>Deploy &amp; Serve</span>
+                    <div class="phase-item" style="border-left-color:#0277BD; animation-delay:0.45s;">
+                        <div class="phase-dot" style="background:#0277BD;">5</div><span>Deploy &amp; Serve</span>
                     </div>
                     <div class="phase-item phase-pipelines" style="border-left-color:#1976D2; animation-delay:0.55s;">
                         <div class="phase-dot" style="background:#1976D2;">🔀</div>
@@ -614,7 +634,7 @@
 
             <!-- K8s Infrastructure -->
             <div class="panel k8s-infra">
-                <div class="panel-title" style="color:#64B5F6;">☸️ Kubernetes Infrastructure</div>
+                <div class="panel-title clr-blue">☸️ Kubernetes Infrastructure</div>
                 <div class="k8s-grid">
                     <div class="k8s-item"><div class="k8s-icon">📋</div><div class="k8s-label">JobSet</div><div class="k8s-desc">Job Orchestration</div></div>
                     <div class="k8s-item"><div class="k8s-icon">📊</div><div class="k8s-label">Kueue</div><div class="k8s-desc">Resource Queuing</div></div>
@@ -630,7 +650,7 @@
 
             <!-- Integrations -->
             <div class="panel">
-                <div class="panel-title" style="color:#CE93D8;">🔗 Ecosystem Integrations</div>
+                <div class="panel-title clr-purple">🔗 Ecosystem Integrations</div>
                 <div class="integrations-grid">
                     <div class="integration hf">
                         <div class="integration-icon">🤗</div>
@@ -653,7 +673,7 @@
 
             <!-- Business Outcomes -->
             <div class="panel">
-                <div class="panel-title" style="color:#81C784;">📈 Business Outcomes</div>
+                <div class="panel-title clr-green">📈 Business Outcomes</div>
                 <div class="outcomes-grid">
                     <div class="outcome-card"><div class="outcome-metric">10×</div><div class="outcome-label">Faster model development cycle</div></div>
                     <div class="outcome-card"><div class="outcome-metric">100%</div><div class="outcome-label">Audit trail &amp; compliance</div></div>
@@ -683,7 +703,7 @@
     <span>🎬</span><span class="tour-link-text">Interactive Tour</span>
 </a>
 <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">
-    <span class="expand">⛶</span><span class="compress">⛶</span>
+    <span class="expand">⛶</span><span class="compress">✕</span>
 </button>
 
 <script>

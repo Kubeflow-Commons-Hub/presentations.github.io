@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kubeflow - Interactive Tour</title>
+    <title>Kubeflow — Interactive Tour</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -233,6 +233,10 @@
             box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
         }
 
+        .nav-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(255, 107, 53, 0.55);
+        }
         .nav-btn.primary:active {
             transform: scale(0.98);
         }
@@ -243,6 +247,10 @@
             padding: 14px 18px;
         }
 
+        .nav-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ddd;
+        }
         .nav-btn.secondary:active {
             background: rgba(255, 255, 255, 0.15);
         }
@@ -258,6 +266,7 @@
            COMMON SLIDE ELEMENTS
            ═══════════════════════════════════════════════════════════════ */
         .slide-icon {
+            position: relative;
             width: 100px;
             height: 100px;
             border-radius: 28px;
@@ -301,10 +310,6 @@
             to { transform: rotate(360deg); }
         }
 
-        .slide-icon {
-            position: relative;
-        }
-
         .slide-badge {
             display: inline-block;
             background: rgba(255, 107, 53, 0.2);
@@ -333,7 +338,7 @@
 
         .slide-text {
             font-size: 1.1rem;
-            color: #bbb;
+            color: #aaa;
             line-height: 1.6;
             margin-bottom: 25px;
         }
@@ -410,7 +415,11 @@
             border-radius: 16px;
             padding: 20px;
             border: 1px solid rgba(255, 107, 53, 0.2);
+            animation: statPulse 3s ease-in-out infinite;
         }
+        .stat-card:nth-child(2) { animation-delay: 0.5s; }
+        .stat-card:nth-child(3) { animation-delay: 1s; }
+        .stat-card:nth-child(4) { animation-delay: 1.5s; }
 
         .stat-value {
             font-size: 1.8rem;
@@ -418,14 +427,6 @@
             color: var(--primary);
             text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
         }
-
-        .stat-card {
-            animation: statPulse 3s ease-in-out infinite;
-        }
-
-        .stat-card:nth-child(2) { animation-delay: 0.5s; }
-        .stat-card:nth-child(3) { animation-delay: 1s; }
-        .stat-card:nth-child(4) { animation-delay: 1.5s; }
 
         @keyframes statPulse {
             0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); }
@@ -447,79 +448,200 @@
             width: 100%;
         }
 
-        .compare-card {
-            background: var(--card);
+        /* ── Flip-card comparison (Slide 1) ─────────────────────── */
+        .flip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 640px;
+            margin-top: 20px;
+            padding: 0 4px;
+        }
+        .flip-header-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            padding: 5px 14px;
             border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 15px;
-            border: 2px solid;
-            text-align: left;
+        }
+        .flip-header-label.before {
+            color: rgba(255, 69, 58, 0.9);
+            background: rgba(255, 69, 58, 0.12);
+            border: 1px solid rgba(255, 69, 58, 0.25);
+        }
+        .flip-header-label.after {
+            color: rgba(52, 199, 89, 0.9);
+            background: rgba(52, 199, 89, 0.12);
+            border: 1px solid rgba(52, 199, 89, 0.25);
+        }
+        .flip-header-arrow {
+            font-size: 1rem;
+            color: #555;
         }
 
-        .compare-card.problem {
-            border-color: var(--danger);
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 640px;
         }
 
-        .compare-card.solution {
-            border-color: var(--success);
-            box-shadow: 0 0 30px rgba(52, 199, 89, 0.2);
-        }
-
-        .compare-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .compare-card.problem h3 { color: var(--danger); }
-        .compare-card.solution h3 { color: var(--success); }
-
-        .compare-list {
-            list-style: none;
-        }
-
-        .compare-list li {
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            color: #ccc;
+        .flip-card {
+            perspective: 1000px;
+            height: 162px;
+            cursor: pointer;
             opacity: 0;
-            animation: listFadeIn 0.4s ease forwards;
+            animation: cardEntrance 0.5s ease forwards;
+            animation-delay: var(--enter-delay, 0s);
+        }
+        .flip-card:not(.flipped):hover .flip-inner {
+            transform: translateY(-4px);
+        }
+        .slide.active .flip-card { animation-name: cardEntrance; }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(22px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .slide.active .compare-card.problem li:nth-child(1) { animation-delay: 0.2s; }
-        .slide.active .compare-card.problem li:nth-child(2) { animation-delay: 0.3s; }
-        .slide.active .compare-card.problem li:nth-child(3) { animation-delay: 0.4s; }
-        .slide.active .compare-card.problem li:nth-child(4) { animation-delay: 0.5s; }
-        .slide.active .compare-card.solution li:nth-child(1) { animation-delay: 0.8s; }
-        .slide.active .compare-card.solution li:nth-child(2) { animation-delay: 0.9s; }
-        .slide.active .compare-card.solution li:nth-child(3) { animation-delay: 1.0s; }
-        .slide.active .compare-card.solution li:nth-child(4) { animation-delay: 1.1s; }
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+            transition-delay: var(--flip-delay, 0s);
+        }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
 
-        @keyframes listFadeIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+        .flip-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            text-align: left;
+            overflow: hidden;
         }
 
-        .compare-card.solution li {
-            color: #9f9;
+        .flip-problem {
+            background: rgba(255, 69, 58, 0.08);
+            border: 1.5px solid rgba(255, 69, 58, 0.3);
+        }
+        .flip-solution {
+            background: rgba(52, 199, 89, 0.08);
+            border: 1.5px solid rgba(52, 199, 89, 0.3);
+            transform: rotateY(180deg);
+            box-shadow: 0 0 30px rgba(52, 199, 89, 0.15);
         }
 
-        .compare-arrow {
-            text-align: center;
-            font-size: 2rem;
-            color: var(--accent);
-            margin: 10px 0;
-            animation: arrowBounce 1s ease-in-out infinite;
+        /* top row: label + stat badge */
+        .flip-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .flip-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+        .flip-problem .flip-label { color: rgba(255, 69, 58, 0.75); }
+        .flip-solution .flip-label { color: rgba(52, 199, 89, 0.75); }
+
+        .flip-stat {
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 2px 9px;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+        .flip-problem .flip-stat {
+            color: rgba(255,69,58,0.7);
+            background: rgba(255,69,58,0.12);
+        }
+        .flip-solution .flip-stat {
+            color: #6ee68c;
+            background: rgba(52,199,89,0.18);
         }
 
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(5px); }
+        /* icon row */
+        .flip-icon {
+            font-size: 1.9rem;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        /* main text */
+        .flip-text {
+            font-size: 0.87rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #ccc;
+        }
+        .flip-solution .flip-text { color: #b6f7c8; }
+
+        /* click hint shown on unflipped cards */
+        .flip-hint {
+            font-size: 0.6rem;
+            color: #444;
+            margin-top: auto;
+            padding-top: 6px;
+        }
+
+        /* Win counter bar shown after all flip */
+        .win-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+            padding: 12px 20px;
+            border-radius: 14px;
+            background: rgba(52, 199, 89, 0.1);
+            border: 1px solid rgba(52, 199, 89, 0.25);
+            width: 100%;
+            max-width: 640px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
+        }
+        .win-bar.visible { opacity: 1; transform: translateY(0); }
+        .win-bar-icon { font-size: 1.3rem; }
+        .win-bar-text { font-size: 0.83rem; color: #9dfcb8; font-weight: 600; }
+        .win-bar-text strong { color: #fff; }
+
+        /* Reveal button */
+        .reveal-btn {
+            margin-top: 16px;
+            padding: 13px 30px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--primary), #FF8A65);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s ease;
+            animation: revealPulse 2s ease-in-out infinite 1.5s;
+        }
+        .reveal-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(255, 107, 53, 0.6); }
+        .reveal-btn.done  { background: linear-gradient(135deg, var(--success), #51CF66); animation: none; box-shadow: 0 4px 20px rgba(52,199,89,0.4); cursor: default; }
+
+        @keyframes revealPulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4); }
+            50%       { box-shadow: 0 4px 35px rgba(255, 107, 53, 0.75); }
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -1344,7 +1466,7 @@
             transform: translateY(0);
         }
 
-        /* Link to Full Diagram - Top Left to avoid nav overlap */
+        /* Link to Full Diagram - matches index tour-link style */
         .diagram-link {
             position: fixed;
             top: 15px;
@@ -1352,21 +1474,21 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #7B68EE, #9B88FF);
+            background: linear-gradient(135deg, #FF6B35, #FF8A65);
             color: white;
             padding: 10px 18px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(123, 104, 238, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
             transition: all 0.3s ease;
             z-index: 300;
         }
 
         .diagram-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(123, 104, 238, 0.6);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.6);
         }
 
         .diagram-link-icon {
@@ -1377,7 +1499,7 @@
             color: white;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .diagram-link {
                 padding: 8px 12px;
                 font-size: 0.8rem;
@@ -1759,7 +1881,14 @@
         /* ═══════════════════════════════════════════════════════════════
            RESPONSIVE ADJUSTMENTS
            ═══════════════════════════════════════════════════════════════ */
+        @media (max-width: 500px) {
+            .flip-grid { grid-template-columns: 1fr; }
+            .flip-card  { height: 120px; }
+        }
+
         @media (min-width: 768px) {
+            .flip-grid { max-width: 720px; gap: 16px; }
+            .flip-card  { height: 160px; }
             .slide {
                 padding: 40px;
                 padding-bottom: 120px;
@@ -1852,14 +1981,14 @@
     <!-- Fullscreen Button -->
     <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)">
         <span class="expand">⛶</span>
-        <span class="compress">⛶</span>
+        <span class="compress">✕</span>
     </button>
     <div class="fs-toast" id="fsToast">Press F or ESC to exit</div>
 
     <!-- Link to Full Diagram -->
-    <a href="index.html" class="diagram-link" title="View Full Diagram">
-        <span class="diagram-link-icon">🖼️</span>
-        <span class="diagram-link-text">Full Diagram</span>
+    <a href="index.html" class="diagram-link" title="View Full Architecture">
+        <span class="diagram-link-icon">🗺️</span>
+        <span class="diagram-link-text">Full Architecture</span>
     </a>
 
     <!-- Progress Bar -->
@@ -1875,436 +2004,487 @@
             <div class="slide-content">
                 <div class="live-indicator">
                     <span class="live-dot"></span>
-                    <span>INTERACTIVE DEMO</span>
+                    <span>INTERACTIVE TOUR</span>
                 </div>
                 <div class="start-icon">☸️</div>
                 <h1 class="start-title">Kubeflow</h1>
-                <p class="start-subtitle">The ML Platform for Kubernetes</p>
+                <p class="start-subtitle">What Can It Do For Your Business?</p>
                 <button class="start-btn" onclick="nextSlide()">
                     Start Tour →
                 </button>
                 <p style="color: var(--gray); font-size: 0.8rem; margin-top: 20px;">
-                    ← → Swipe or use arrow keys<br>
+                    ← → Swipe or use arrow keys &nbsp;·&nbsp;
                     <span style="color: var(--accent);">F</span> for fullscreen
                 </p>
             </div>
         </div>
 
-        <!-- Slide 1: What is Kubeflow -->
+        <!-- ═══ SLIDE 1: Business Pain ══════════════════════════════════ -->
         <div class="slide" data-slide="1">
             <div class="slide-content">
-                <div class="slide-icon" style="background: linear-gradient(135deg, #326CE5, #64B5F6); color: #90CAF9;">
-                    ☸️
+                <span class="slide-badge">THE CHALLENGE</span>
+                <h2 class="slide-title">AI at Scale is <span class="gradient">Hard</span></h2>
+                <p class="slide-text">Without a unified platform, teams waste months on <strong>infrastructure</strong> instead of models.</p>
+
+                <div class="flip-header">
+                    <span class="flip-header-label before">❌ Without Kubeflow</span>
+                    <span class="flip-header-arrow">flip each card →</span>
+                    <span class="flip-header-label after">✅ With Kubeflow</span>
                 </div>
-                <span class="slide-badge">CNCF Incubating</span>
-                <h2 class="slide-title">What is <span class="gradient">Kubeflow</span>?</h2>
-                <p class="slide-text">
-                    The <strong>machine learning platform</strong> for Kubernetes. 
-                    Train models at scale — from <strong>1 GPU</strong> to <strong>1000 GPUs</strong>.
-                </p>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">14.5K</div>
-                        <div class="stat-label">GitHub Stars</div>
+
+                <div class="flip-grid" id="flipGrid">
+                    <!-- Card 1: Speed -->
+                    <div class="flip-card" style="--enter-delay:0.1s; --flip-delay:0s;" onclick="flipCard(this)">
+                        <div class="flip-inner">
+                            <div class="flip-face flip-problem">
+                                <div class="flip-top">
+                                    <span class="flip-label">The Pain</span>
+                                    <span class="flip-stat">6–12 mo</span>
+                                </div>
+                                <div class="flip-icon">⏱️</div>
+                                <div class="flip-text">Months from idea to first production model</div>
+                                <div class="flip-hint">tap to flip</div>
+                            </div>
+                            <div class="flip-face flip-solution">
+                                <div class="flip-top">
+                                    <span class="flip-label">With Kubeflow</span>
+                                    <span class="flip-stat">10× faster</span>
+                                </div>
+                                <div class="flip-icon">⚡</div>
+                                <div class="flip-text">Days from raw data to deployed model</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">600+</div>
-                        <div class="stat-label">Contributors</div>
+                    <!-- Card 2: Collaboration -->
+                    <div class="flip-card" style="--enter-delay:0.22s; --flip-delay:0.15s;" onclick="flipCard(this)">
+                        <div class="flip-inner">
+                            <div class="flip-face flip-problem">
+                                <div class="flip-top">
+                                    <span class="flip-label">The Pain</span>
+                                    <span class="flip-stat">N × effort</span>
+                                </div>
+                                <div class="flip-icon">🔁</div>
+                                <div class="flip-text">Every team rebuilds the same infrastructure</div>
+                                <div class="flip-hint">tap to flip</div>
+                            </div>
+                            <div class="flip-face flip-solution">
+                                <div class="flip-top">
+                                    <span class="flip-label">With Kubeflow</span>
+                                    <span class="flip-stat">1 platform</span>
+                                </div>
+                                <div class="flip-icon">🤝</div>
+                                <div class="flip-text">One shared platform for every team in the org</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">1000+</div>
-                        <div class="stat-label">Organizations</div>
+                    <!-- Card 3: Governance -->
+                    <div class="flip-card" style="--enter-delay:0.34s; --flip-delay:0.3s;" onclick="flipCard(this)">
+                        <div class="flip-inner">
+                            <div class="flip-face flip-problem">
+                                <div class="flip-top">
+                                    <span class="flip-label">The Pain</span>
+                                    <span class="flip-stat">0% audit</span>
+                                </div>
+                                <div class="flip-icon">🔍</div>
+                                <div class="flip-text">No governance — can't audit what's live</div>
+                                <div class="flip-hint">tap to flip</div>
+                            </div>
+                            <div class="flip-face flip-solution">
+                                <div class="flip-top">
+                                    <span class="flip-label">With Kubeflow</span>
+                                    <span class="flip-stat">100% trail</span>
+                                </div>
+                                <div class="flip-icon">📋</div>
+                                <div class="flip-text">Full audit trail, lineage &amp; compliance built in</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">6</div>
-                        <div class="stat-label">Components</div>
+                    <!-- Card 4: Lock-in -->
+                    <div class="flip-card" style="--enter-delay:0.46s; --flip-delay:0.45s;" onclick="flipCard(this)">
+                        <div class="flip-inner">
+                            <div class="flip-face flip-problem">
+                                <div class="flip-top">
+                                    <span class="flip-label">The Pain</span>
+                                    <span class="flip-stat">lock-in</span>
+                                </div>
+                                <div class="flip-icon">🔒</div>
+                                <div class="flip-text">Vendor lock-in with every new tool you adopt</div>
+                                <div class="flip-hint">tap to flip</div>
+                            </div>
+                            <div class="flip-face flip-solution">
+                                <div class="flip-top">
+                                    <span class="flip-label">With Kubeflow</span>
+                                    <span class="flip-stat">0 lock-in</span>
+                                </div>
+                                <div class="flip-icon">🌐</div>
+                                <div class="flip-text">100% open source — CNCF, zero vendor lock-in</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="win-bar" id="winBar">
+                    <span class="win-bar-icon">🚀</span>
+                    <span class="win-bar-text"><strong>Kubeflow fixes all four.</strong> One platform — faster, collaborative, governed, and open source.</span>
+                </div>
+
+                <button class="reveal-btn" id="revealBtn" onclick="flipAllCards()">
+                    ✨ Flip all — see how Kubeflow fixes this
+                </button>
             </div>
         </div>
 
-        <!-- Slide 2: Who Uses Kubeflow -->
+        <!-- ═══ SLIDE 2: The 5 Phases ════════════════════════════════════ -->
         <div class="slide" data-slide="2">
-            <div class="slide-content">
-                <h2 class="slide-title">Who's Using <span class="gradient">Kubeflow</span>?</h2>
-                <p class="slide-text">
-                    From startups to <strong>Fortune 500</strong> companies
-                </p>
-                <div class="usecase-list">
-                    <div class="usecase-card">
-                        <div class="usecase-logo">🔵</div>
-                        <div class="usecase-text">
-                            <h4>Google</h4>
-                            <p>Original creators, running ML at massive scale</p>
-                        </div>
-                    </div>
-                    <div class="usecase-card">
-                        <div class="usecase-logo">🟢</div>
-                        <div class="usecase-text">
-                            <h4>Spotify</h4>
-                            <p>Powering music recommendations for 500M+ users</p>
-                        </div>
-                    </div>
-                    <div class="usecase-card">
-                        <div class="usecase-logo">🔴</div>
-                        <div class="usecase-text">
-                            <h4>Bloomberg</h4>
-                            <p>Financial ML models with enterprise compliance</p>
-                        </div>
-                    </div>
-                </div>
-                <p style="color: var(--gray); font-size: 0.8rem; margin-top: 15px;">
-                    + Red Hat, NVIDIA, Apple, AWS, and more...
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 3: Problem vs Solution -->
-        <div class="slide" data-slide="3">
-            <div class="slide-content">
-                <h2 class="slide-title">The Problem We Solve</h2>
-                <div class="comparison-container">
-                    <div class="compare-card problem">
-                        <h3>❌ Without Kubeflow</h3>
-                        <ul class="compare-list">
-                            <li>😫 Manual YAML for every job</li>
-                            <li>🔧 Configure distributed training manually</li>
-                            <li>📦 Build Docker images yourself</li>
-                            <li>⏱️ Weeks of infrastructure setup</li>
-                        </ul>
-                    </div>
-                    <div class="compare-arrow">↓</div>
-                    <div class="compare-card solution">
-                        <h3>✅ With Kubeflow</h3>
-                        <ul class="compare-list">
-                            <li>🚀 One unified API</li>
-                            <li>✨ Auto-configured distributed training</li>
-                            <li>📦 Built-in runtimes</li>
-                            <li>⚡ Minutes to production</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 4: 6 Components - ML Lifecycle Mapping -->
-        <div class="slide" data-slide="4">
             <div class="slide-content" style="max-width: 900px;">
-                <h2 class="slide-title">ML Lifecycle → Kubeflow</h2>
-                
-                <!-- ML Lifecycle Row (Top) -->
+                <span class="slide-badge">THE PLATFORM</span>
+                <h2 class="slide-title">One Platform, <span class="gradient">Five Phases</span></h2>
+                <p class="slide-text">From raw data to live production — every phase covered.</p>
+
                 <div class="lifecycle-row">
-                    <div class="lifecycle-stage" data-pair="notebooks" style="--stage-color: #7B1FA2; --delay: 0s;">
-                        <div class="stage-arrow">💻</div>
-                        <div class="stage-name">DEVELOP</div>
-                        <div class="stage-desc">Write code</div>
+                    <div class="lifecycle-stage" style="--stage-color:#F57C00; --delay:0s;">
+                        <div class="stage-arrow">⚙️</div>
+                        <div class="stage-name">PREPARE</div>
+                        <div class="stage-desc">Spark + Feast</div>
                     </div>
                     <div class="lifecycle-connector">→</div>
-                    <div class="lifecycle-stage" data-pair="trainer" style="--stage-color: #E64A19; --delay: 1.2s;">
-                        <div class="stage-arrow">🏋️</div>
-                        <div class="stage-name">TRAIN</div>
-                        <div class="stage-desc">Run at scale</div>
+                    <div class="lifecycle-stage" style="--stage-color:#9C27B0; --delay:1s;">
+                        <div class="stage-arrow">📓</div>
+                        <div class="stage-name">EXPERIMENT</div>
+                        <div class="stage-desc">Notebooks</div>
                     </div>
                     <div class="lifecycle-connector">→</div>
-                    <div class="lifecycle-stage" data-pair="katib" style="--stage-color: #0097A7; --delay: 2.4s;">
-                        <div class="stage-arrow">🎯</div>
-                        <div class="stage-name">TUNE</div>
-                        <div class="stage-desc">Find best params</div>
-                    </div>
-                    <div class="lifecycle-connector">→</div>
-                    <div class="lifecycle-stage" data-pair="registry" style="--stage-color: #388E3C; --delay: 3.6s;">
-                        <div class="stage-arrow">📦</div>
-                        <div class="stage-name">REGISTER</div>
-                        <div class="stage-desc">Version model</div>
-                    </div>
-                    <div class="lifecycle-connector">→</div>
-                    <div class="lifecycle-stage" data-pair="kserve" style="--stage-color: #F57C00; --delay: 4.8s;">
+                    <div class="lifecycle-stage" style="--stage-color:#E64A19; --delay:2s;">
                         <div class="stage-arrow">🚀</div>
-                        <div class="stage-name">SERVE</div>
-                        <div class="stage-desc">Deploy to users</div>
+                        <div class="stage-name">TRAIN</div>
+                        <div class="stage-desc">Trainer + Katib</div>
+                    </div>
+                    <div class="lifecycle-connector">→</div>
+                    <div class="lifecycle-stage" style="--stage-color:#388E3C; --delay:3s;">
+                        <div class="stage-arrow">📦</div>
+                        <div class="stage-name">GOVERN</div>
+                        <div class="stage-desc">Model Registry</div>
+                    </div>
+                    <div class="lifecycle-connector">→</div>
+                    <div class="lifecycle-stage" style="--stage-color:#0277BD; --delay:4s;">
+                        <div class="stage-arrow">🌐</div>
+                        <div class="stage-name">DEPLOY</div>
+                        <div class="stage-desc">KServe</div>
                     </div>
                 </div>
 
-                <!-- Vertical Connection Lines -->
                 <div class="mapping-lines">
-                    <div class="map-line" style="--line-color: #7B1FA2; --delay: 0s;"></div>
-                    <div class="map-line" style="--line-color: #E64A19; --delay: 1.2s;"></div>
-                    <div class="map-line" style="--line-color: #0097A7; --delay: 2.4s;"></div>
-                    <div class="map-line" style="--line-color: #388E3C; --delay: 3.6s;"></div>
-                    <div class="map-line" style="--line-color: #F57C00; --delay: 4.8s;"></div>
+                    <div class="map-line" style="--line-color:#F57C00; --delay:0s;"></div>
+                    <div class="map-line" style="--line-color:#9C27B0; --delay:1s;"></div>
+                    <div class="map-line" style="--line-color:#E64A19; --delay:2s;"></div>
+                    <div class="map-line" style="--line-color:#388E3C; --delay:3s;"></div>
+                    <div class="map-line" style="--line-color:#0277BD; --delay:4s;"></div>
                 </div>
 
-                <!-- Kubeflow Components Row (Bottom) - SAME delays as ML stages -->
                 <div class="kubeflow-row">
-                    <div class="kf-component" data-id="notebooks" style="--kf-color: #7B1FA2; --delay: 0s;">
+                    <div class="kf-component" style="--kf-color:#F57C00; --delay:0s;">
+                        <div class="kf-icon">⚡🏪</div>
+                        <div class="kf-name">SPARK + FEAST</div>
+                        <div class="kf-desc">ETL &amp; Feature Store</div>
+                    </div>
+                    <div class="kf-component" style="--kf-color:#9C27B0; --delay:1s;">
                         <div class="kf-icon">📓</div>
                         <div class="kf-name">NOTEBOOKS</div>
-                        <div class="kf-desc">Jupyter, VSCode on K8s</div>
+                        <div class="kf-desc">Dev environments</div>
                     </div>
-                    <div class="kf-component" data-id="trainer" style="--kf-color: #E64A19; --delay: 1.2s;">
+                    <div class="kf-component" style="--kf-color:#E64A19; --delay:2s;">
                         <div class="kf-icon">🎯</div>
-                        <div class="kf-name">TRAINER</div>
-                        <div class="kf-desc">1 GPU → 1000 GPUs</div>
+                        <div class="kf-name">TRAINER + KATIB</div>
+                        <div class="kf-desc">Scale &amp; AutoML</div>
                     </div>
-                    <div class="kf-component" data-id="katib" style="--kf-color: #0097A7; --delay: 2.4s;">
-                        <div class="kf-icon">🎛️</div>
-                        <div class="kf-name">KATIB</div>
-                        <div class="kf-desc">AutoML & HPO</div>
-                    </div>
-                    <div class="kf-component" data-id="registry" style="--kf-color: #388E3C; --delay: 3.6s;">
+                    <div class="kf-component" style="--kf-color:#388E3C; --delay:3s;">
                         <div class="kf-icon">📦</div>
                         <div class="kf-name">REGISTRY</div>
                         <div class="kf-desc">Model versioning</div>
                     </div>
-                    <div class="kf-component" data-id="kserve" style="--kf-color: #F57C00; --delay: 4.8s;">
-                        <div class="kf-icon">🚀</div>
+                    <div class="kf-component" style="--kf-color:#0277BD; --delay:4s;">
+                        <div class="kf-icon">🌐</div>
                         <div class="kf-name">KSERVE</div>
                         <div class="kf-desc">Serverless inference</div>
                     </div>
                 </div>
 
-                <!-- Pipelines (Orchestrator) -->
                 <div class="pipelines-orchestrator">
                     <div class="orchestrator-bracket"></div>
                     <div class="orchestrator-box">
                         <span class="orchestrator-icon">🔀</span>
                         <span class="orchestrator-name">PIPELINES</span>
-                        <span class="orchestrator-desc">Orchestrates the entire workflow</span>
+                        <span class="orchestrator-desc">Orchestrates the entire lifecycle</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 5: Training Operator -->
+        <!-- ═══ SLIDE 3: Phase 1 — Prepare Data ═════════════════════════ -->
+        <div class="slide" data-slide="3">
+            <div class="slide-content">
+                <div class="slide-icon" style="background: linear-gradient(135deg, #E65100, #F57C00); color: #FFE0B2;">
+                    ⚙️
+                </div>
+                <span class="slide-badge">PHASE 1</span>
+                <h2 class="slide-title">Prepare Your <span class="gradient">Data</span></h2>
+                <p class="slide-text">
+                    Process any data at scale and build a <strong>shared feature store</strong> — consistent from training to live serving.
+                </p>
+                <div class="feature-list">
+                    <div class="feature-item" style="border-left-color: #FF9800;">
+                        <span class="feature-emoji">⚡</span>
+                        <div class="feature-text">
+                            <h4>Apache Spark — ETL at Scale</h4>
+                            <p>Process petabytes of raw data with distributed Spark jobs — no infrastructure setup needed.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #4ECDC4;">
+                        <span class="feature-emoji">🏪</span>
+                        <div class="feature-text">
+                            <h4>Feast Feature Store</h4>
+                            <p>One consistent feature definition used by both training and serving — eliminates training-serving skew.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #81C784;">
+                        <span class="feature-emoji">🔒</span>
+                        <div class="feature-text">
+                            <h4>Governed &amp; Versioned</h4>
+                            <p>Every dataset versioned with full lineage — know exactly which data trained every model.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SLIDE 4: Phase 2 — Experiment ═══════════════════════════ -->
+        <div class="slide" data-slide="4">
+            <div class="slide-content">
+                <div class="slide-icon" style="background: linear-gradient(135deg, #7B1FA2, #9C27B0); color: #E1BEE7;">
+                    📓
+                </div>
+                <span class="slide-badge">PHASE 2</span>
+                <h2 class="slide-title">Experiment <span class="gradient">Without Limits</span></h2>
+                <p class="slide-text">
+                    Data scientists get <strong>on-demand GPU workspaces</strong> in seconds — no IT tickets, no setup delays.
+                </p>
+                <div class="feature-list">
+                    <div class="feature-item" style="border-left-color: #9C27B0;">
+                        <span class="feature-emoji">💻</span>
+                        <div class="feature-text">
+                            <h4>Your IDE, on the Cluster</h4>
+                            <p>JupyterLab, VSCode, or RStudio — with full cluster compute and GPU access instantly.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #9C27B0;">
+                        <span class="feature-emoji">🔄</span>
+                        <div class="feature-text">
+                            <h4>Reproducible Environments</h4>
+                            <p>Environments are versioned alongside code — any teammate can reproduce your exact setup.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #9C27B0;">
+                        <span class="feature-emoji">🤝</span>
+                        <div class="feature-text">
+                            <h4>Team Collaboration</h4>
+                            <p>Share notebooks and datasets across the team with built-in access control.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SLIDE 5: Phase 3 — Train & Optimize ══════════════════════ -->
         <div class="slide" data-slide="5">
             <div class="slide-content">
                 <div class="slide-icon" style="background: linear-gradient(135deg, #E64A19, #FF7043); color: #FFAB91;">
-                    🎯
+                    🚀
                 </div>
-                <h2 class="slide-title">Training Operator</h2>
+                <span class="slide-badge">PHASE 3</span>
+                <h2 class="slide-title">Train &amp; <span class="gradient">Optimize</span></h2>
                 <p class="slide-text">
-                    Kubernetes-native <strong>distributed AI training</strong> — scalable from 1 GPU to thousands
+                    Fine-tune any model on your data — <strong>1 GPU to 1,000s</strong>, same code. AutoML finds the best config automatically.
                 </p>
-                
-                <!-- Architecture Flow -->
-                <div class="arch-flow">
-                    <div class="arch-node user">
-                        <div class="arch-node-icon">👤</div>
-                        <div class="arch-node-label">You</div>
-                    </div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-node api">
-                        <div class="arch-node-icon">📝</div>
-                        <div class="arch-node-label">TrainJob</div>
-                    </div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-node runtime">
-                        <div class="arch-node-icon">⚙️</div>
-                        <div class="arch-node-label">Runtime</div>
-                    </div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-node k8s">
-                        <div class="arch-node-icon">☸️</div>
-                        <div class="arch-node-label">Pods</div>
-                    </div>
-                </div>
-                
-                <!-- GPU Activity Visualization -->
                 <div class="gpu-activity">
-                    <div class="gpu-card">
-                        <div class="gpu-label">GPU 0</div>
-                        <div class="gpu-bar"><div class="gpu-fill" style="animation-delay: 0s;"></div></div>
-                    </div>
-                    <div class="gpu-card">
-                        <div class="gpu-label">GPU 1</div>
-                        <div class="gpu-bar"><div class="gpu-fill" style="animation-delay: 0.2s;"></div></div>
-                    </div>
-                    <div class="gpu-card">
-                        <div class="gpu-label">GPU 2</div>
-                        <div class="gpu-bar"><div class="gpu-fill" style="animation-delay: 0.4s;"></div></div>
-                    </div>
-                    <div class="gpu-card">
-                        <div class="gpu-label">GPU 3</div>
-                        <div class="gpu-bar"><div class="gpu-fill" style="animation-delay: 0.6s;"></div></div>
-                    </div>
+                    <div class="gpu-card"><div class="gpu-label">GPU 0</div><div class="gpu-bar"><div class="gpu-fill" style="animation-delay:0s;"></div></div></div>
+                    <div class="gpu-card"><div class="gpu-label">GPU 1</div><div class="gpu-bar"><div class="gpu-fill" style="animation-delay:0.2s;"></div></div></div>
+                    <div class="gpu-card"><div class="gpu-label">GPU 2</div><div class="gpu-bar"><div class="gpu-fill" style="animation-delay:0.4s;"></div></div></div>
+                    <div class="gpu-card"><div class="gpu-label">GPU 3</div><div class="gpu-bar"><div class="gpu-fill" style="animation-delay:0.6s;"></div></div></div>
                 </div>
-                
-                <div class="feature-list">
-                    <div class="feature-item">
-                        <span class="feature-emoji">🔥</span>
-                        <div class="feature-text">
-                            <h4>Multi-Framework</h4>
-                            <p>PyTorch, JAX, TensorFlow, MPI, DeepSpeed</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-emoji">📈</span>
-                        <div class="feature-text">
-                            <h4>Auto-Scaling</h4>
-                            <p>1 GPU to 1000 GPUs, same code</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-emoji">🤖</span>
-                        <div class="feature-text">
-                            <h4>LLM Fine-tuning</h4>
-                            <p>Built-in recipes for Llama, Qwen, Mistral</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Supported Frameworks -->
-        <div class="slide" data-slide="6">
-            <div class="slide-content">
-                <h2 class="slide-title">Works With Your Stack</h2>
-                <p class="slide-text">
-                    <strong>Any framework</strong>, any scale, same simple API
-                </p>
-                <div class="framework-grid">
-                    <div class="framework-badge">
-                        <span class="fw-icon">🔥</span>
-                        <span>PyTorch</span>
-                    </div>
-                    <div class="framework-badge">
-                        <span class="fw-icon">🧠</span>
-                        <span>TensorFlow</span>
-                    </div>
-                    <div class="framework-badge">
-                        <span class="fw-icon">⚡</span>
-                        <span>JAX</span>
-                    </div>
-                    <div class="framework-badge">
-                        <span class="fw-icon">🚀</span>
-                        <span>DeepSpeed</span>
-                    </div>
-                    <div class="framework-badge">
-                        <span class="fw-icon">🤗</span>
-                        <span>HuggingFace</span>
-                    </div>
-                    <div class="framework-badge">
-                        <span class="fw-icon">📡</span>
-                        <span>MPI</span>
-                    </div>
-                </div>
-                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 20px; text-align: center;">
-                    + XGBoost, MLX, PaddlePaddle, and custom runtimes
-                </p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Code Example -->
-        <div class="slide" data-slide="7">
-            <div class="slide-content">
-                <div class="slide-icon" style="background: linear-gradient(135deg, #4CAF50, #81C784); color: #C8E6C9;">
-                    🐍
-                </div>
-                <h2 class="slide-title">Just 5 Lines of Code</h2>
-                <p class="slide-text">
-                    Fine-tune LLMs with the <strong>Python SDK</strong>
-                </p>
                 <div class="code-block">
                     <div class="code-line"><span class="keyword">from</span> kubeflow.trainer <span class="keyword">import</span> TrainingClient</div>
                     <div class="code-line">&nbsp;</div>
                     <div class="code-line">client = TrainingClient()</div>
-                    <div class="code-line">&nbsp;</div>
                     <div class="code-line">client.<span class="function">train</span>(</div>
                     <div class="code-line">&nbsp;&nbsp;model=<span class="string">"meta-llama/Llama-3.2-1B"</span>,</div>
                     <div class="code-line">&nbsp;&nbsp;dataset=<span class="string">"tatsu-lab/alpaca"</span>,</div>
                     <div class="code-line">&nbsp;&nbsp;num_nodes=<span class="number">4</span></div>
-                    <div class="code-line">)</div>
-                    <div class="code-line">&nbsp;</div>
-                    <div class="code-line"><span class="comment"># That's it! 🚀</span></div>
+                    <div class="code-line">)  <span class="comment"># That's it 🚀</span></div>
                 </div>
-                
-                <!-- Training Progress Simulation -->
                 <div class="training-sim">
-                    <div class="sim-header">
-                        <span class="live-dot"></span>
-                        <span>Training in progress...</span>
-                    </div>
+                    <div class="sim-header"><span class="live-dot"></span><span>Training in progress...</span></div>
                     <div class="sim-metrics">
-                        <div class="sim-metric">
-                            <span class="sim-label">Epoch</span>
-                            <span class="sim-value epoch-counter">1/3</span>
-                        </div>
-                        <div class="sim-metric">
-                            <span class="sim-label">Loss</span>
-                            <span class="sim-value loss-counter">2.45</span>
-                        </div>
-                        <div class="sim-metric">
-                            <span class="sim-label">Speed</span>
-                            <span class="sim-value">4.2 it/s</span>
+                        <div class="sim-metric"><span class="sim-label">Epoch</span><span class="sim-value epoch-counter">1/3</span></div>
+                        <div class="sim-metric"><span class="sim-label">Loss</span><span class="sim-value loss-counter">2.45</span></div>
+                        <div class="sim-metric"><span class="sim-label">Speed</span><span class="sim-value">4.2 it/s</span></div>
+                    </div>
+                    <div class="sim-progress"><div class="sim-progress-fill"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SLIDE 6: Phase 4 — Govern ═══════════════════════════════ -->
+        <div class="slide" data-slide="6">
+            <div class="slide-content">
+                <div class="slide-icon" style="background: linear-gradient(135deg, #388E3C, #66BB6A); color: #C8E6C9;">
+                    📦
+                </div>
+                <span class="slide-badge">PHASE 4</span>
+                <h2 class="slide-title">Govern Every <span class="gradient">Model</span></h2>
+                <p class="slide-text">
+                    Know exactly what is in production, who approved it, and why — <strong>full audit trail</strong> built in.
+                </p>
+                <div class="feature-list">
+                    <div class="feature-item" style="border-left-color: #4CAF50;">
+                        <span class="feature-emoji">📋</span>
+                        <div class="feature-text">
+                            <h4>Complete Version History</h4>
+                            <p>Every model version stored with metadata, tags, and full data lineage.</p>
                         </div>
                     </div>
-                    <div class="sim-progress">
-                        <div class="sim-progress-fill"></div>
+                    <div class="feature-item" style="border-left-color: #4CAF50;">
+                        <span class="feature-emoji">🔍</span>
+                        <div class="feature-text">
+                            <h4>Compliance &amp; Audit Trail</h4>
+                            <p>Approval workflows and immutable run history — meet regulatory requirements without extra tooling.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #4CAF50;">
+                        <span class="feature-emoji">🔁</span>
+                        <div class="feature-text">
+                            <h4>Full Reproducibility</h4>
+                            <p>Trace exactly which data, code, and configuration produced any model — reproduce any result on demand.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 8: Quick Start Terminal -->
-        <div class="slide" data-slide="8">
+        <!-- ═══ SLIDE 7: Phase 5 — Deploy ═══════════════════════════════ -->
+        <div class="slide" data-slide="7">
             <div class="slide-content">
-                <h2 class="slide-title">Try It <span class="gradient">Now</span></h2>
+                <div class="slide-icon" style="background: linear-gradient(135deg, #F57C00, #FFA726); color: #FFE0B2;">
+                    🌐
+                </div>
+                <span class="slide-badge">PHASE 5</span>
+                <h2 class="slide-title">Deploy to <span class="gradient">Production</span></h2>
                 <p class="slide-text">
-                    Up and running in <strong>under 5 minutes</strong>
+                    Registry to live endpoint in <strong>minutes</strong> — auto-scales with demand, zero-downtime rollouts.
                 </p>
                 <div class="terminal">
                     <div class="terminal-header">
                         <span class="terminal-dot red"></span>
                         <span class="terminal-dot yellow"></span>
                         <span class="terminal-dot green"></span>
-                        <span class="terminal-title">Terminal</span>
+                        <span class="terminal-title">Deploying model...</span>
                     </div>
                     <div class="terminal-body">
                         <div class="terminal-line">
                             <span class="terminal-prompt">$ </span>
-                            <span class="terminal-cmd">pip install kubeflow-trainer</span>
+                            <span class="terminal-cmd">kserve deploy --model llama-finetune-v2</span>
                         </div>
                         <div class="terminal-line">
-                            <span class="terminal-output">✓ Successfully installed kubeflow-trainer</span>
+                            <span class="terminal-output">✓ InferenceService created</span>
                         </div>
                         <div class="terminal-line">
-                            <span class="terminal-prompt">$ </span>
-                            <span class="terminal-cmd">python train.py</span>
+                            <span class="terminal-output">✓ Auto-scaling: 0 → ∞ replicas</span>
                         </div>
                         <div class="terminal-line">
-                            <span class="terminal-output">🚀 TrainJob created: llama-finetune-abc123</span>
+                            <span class="terminal-output">✓ Canary traffic split: 10% → new version</span>
                         </div>
                         <div class="terminal-line">
-                            <span class="terminal-output">📊 Training on 4 GPUs across 2 nodes...</span>
+                            <span class="terminal-output">🌐 Endpoint live: https://model.example.com</span>
                         </div>
                     </div>
                 </div>
-                <p style="color: var(--gray); font-size: 0.8rem; margin-top: 15px;">
-                    Works with any Kubernetes cluster with GPU nodes
-                </p>
             </div>
         </div>
 
-        <!-- Slide 9: Get Started -->
+        <!-- ═══ SLIDE 8: Automate It All — Pipelines ════════════════════ -->
+        <div class="slide" data-slide="8">
+            <div class="slide-content" style="max-width: 700px;">
+                <div class="slide-icon" style="background: linear-gradient(135deg, #1976D2, #42A5F5); color: #BBDEFB;">
+                    🔀
+                </div>
+                <span class="slide-badge">ORCHESTRATION</span>
+                <h2 class="slide-title">Automate <span class="gradient">Everything</span></h2>
+                <p class="slide-text">
+                    Define the full AI lifecycle as code — <strong>once</strong>. Pipelines runs it automatically, every time.
+                </p>
+                <div class="feature-list">
+                    <div class="feature-item" style="border-left-color: #42A5F5;">
+                        <span class="feature-emoji">🔁</span>
+                        <div class="feature-text">
+                            <h4>End-to-End Automation</h4>
+                            <p>Data prep → training → evaluation → registry → deployment — all wired together as one pipeline.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #42A5F5;">
+                        <span class="feature-emoji">⚡</span>
+                        <div class="feature-text">
+                            <h4>Smart Caching</h4>
+                            <p>Steps that haven't changed are skipped automatically — cut re-run costs by up to 80%.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" style="border-left-color: #42A5F5;">
+                        <span class="feature-emoji">📜</span>
+                        <div class="feature-text">
+                            <h4>Full Run History</h4>
+                            <p>Every execution logged with inputs, outputs, and timing — complete operational audit trail.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ SLIDE 9: Explore the Full Platform ═══════════════════════ -->
         <div class="slide" data-slide="9">
             <div class="slide-content">
                 <div class="slide-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">
-                    🚀
+                    ☸️
                 </div>
-                <h2 class="slide-title">Ready to Start?</h2>
+                <h2 class="slide-title">Explore the <span class="gradient">Full Platform</span></h2>
                 <p class="slide-text">
-                    Join <strong>1000+ organizations</strong> using Kubeflow in production
+                    See the complete architecture — select your role to find what matters to you.
                 </p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">10×</div>
+                        <div class="stat-label">Faster Development</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Audit Trail</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Scale Without Code Changes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Vendor Lock-in</div>
+                    </div>
+                </div>
                 <div class="cta-buttons">
-                    <a href="https://www.kubeflow.org/docs/components/trainer/getting-started" class="cta-btn primary">
+                    <a href="index.html" class="cta-btn primary">
+                        🗺️ Full Architecture View
+                    </a>
+                    <a href="https://www.kubeflow.org/docs" class="cta-btn outline">
                         📖 Documentation
                     </a>
-                    <a href="https://github.com/kubeflow/trainer" class="cta-btn outline">
-                        ⭐ GitHub
-                    </a>
                 </div>
-                <p style="color: var(--accent); font-size: 1.1rem; margin-top: 30px;">
-                    💬 Talk to us at the booth!
+                <p style="color: var(--accent); font-size: 0.95rem; margin-top: 25px;">
+                    CNCF Incubating · Apache Spark · Feast · Open Source
                 </p>
             </div>
         </div>
@@ -2339,16 +2519,16 @@
 
         // Guide messages for each slide
         const guideMessages = {
-            0: null, // No guide on start screen
-            1: "Hey there! 👋 I'm <strong>Kube</strong>, your guide. Kubeflow is backed by the <span class='highlight'>CNCF</span> and used by thousands of companies worldwide!",
-            2: "These aren't just logos — companies like <strong>Spotify</strong> serve 500M+ users with ML powered by Kubeflow! 🎵",
-            3: "Ever spent weeks setting up ML infrastructure? <span class='highlight'>Kubeflow eliminates all that pain</span>. One API, infinite scale! 🚀",
-            4: "Watch how each <strong>ML lifecycle stage</strong> maps to a Kubeflow component! From developing code to serving models — <span class='highlight'>Pipelines orchestrates it all</span>.",
-            5: "Check out those GPUs! 🎯 Kubeflow Trainer scales from <span class='highlight'>1 GPU to thousands</span> — same Python code, same API, any framework!",
-            6: "From PyTorch to JAX — <strong>bring your own framework</strong>. The Training Operator handles the distributed magic! ✨",
-            7: "That's it. <strong>5 lines of Python</strong>. No YAML, no Docker builds, no infrastructure headaches! 🐍",
-            8: "Copy this command and you're ready to go! Works on any K8s cluster with GPUs. <span class='highlight'>Under 5 minutes!</span> ⚡",
-            9: "Thanks for touring with me! 🙏 Grab the docs, star us on GitHub, or <strong>talk to the team right here at the booth!</strong>"
+            0: null,
+            1: "Hey! 👋 I'm <strong>Kube</strong>, your guide. Most teams waste <span class='highlight'>6–12 months</span> on AI infrastructure before writing a single model. Kubeflow changes that.",
+            2: "This is the full lifecycle — notice <strong>Spark + Feast</strong> at the start! Most platforms skip the data preparation phase. We don't.",
+            3: "⚡ <strong>Spark + Feast</strong> is the secret weapon. Training-serving skew is one of the top reasons models fail in production — Feast eliminates it.",
+            4: "No more waiting for IT! 🧑‍🔬 Data scientists get <span class='highlight'>GPU-backed environments in seconds</span> — and everything is reproducible across the team.",
+            5: "Watch those GPUs go! 🚀 <strong>Same Python code</strong>, whether you're running on 1 GPU or 1,000. Kubeflow Trainer handles all the distributed magic.",
+            6: "This is what keeps compliance teams happy. 📋 Every model has a <span class='highlight'>complete audit trail</span> — who trained it, on what data, when, and why.",
+            7: "From registry to live endpoint in <strong>under 5 minutes</strong>. And if something goes wrong? One command to roll back. 🌐",
+            8: "Define it once, run it forever. 🔀 <strong>Kubeflow Pipelines</strong> stitches all five phases together — automated, cached, and fully audited.",
+            9: "Thanks for the tour! 🙏 Hit <strong>Full Architecture View</strong> to explore interactively by your role — or go straight to the docs to get started."
         };
 
         let guideHiddenForSlide = -1; // Track which slide the user closed dialog on
@@ -2410,6 +2590,9 @@
                 document.getElementById('nextBtn').textContent = currentSlide === totalSlides - 1 ? 'Restart ↻' : 'Next →';
             }
 
+            // Reset flip cards when navigating away from slide 1
+            if (currentSlide !== 1) resetFlipCards();
+
             // Update guide
             updateGuide();
         }
@@ -2428,6 +2611,52 @@
                 currentSlide--;
                 updateUI();
             }
+        }
+
+        // ── Flip-card reveal (Slide 1) ──────────────────────────────
+        let allFlipped = false;
+
+        function checkAllFlipped() {
+            const cards  = document.querySelectorAll('#flipGrid .flip-card');
+            const nFlipped = [...cards].filter(c => c.classList.contains('flipped')).length;
+            if (nFlipped === cards.length) {
+                allFlipped = true;
+                const btn = document.getElementById('revealBtn');
+                btn.disabled = true;
+                btn.classList.add('done');
+                btn.textContent = '✅ All four fixed!';
+                document.getElementById('winBar').classList.add('visible');
+            }
+        }
+
+        function flipCard(card) {
+            if (card.classList.contains('flipped')) return;
+            card.classList.add('flipped');
+            checkAllFlipped();
+        }
+
+        function flipAllCards() {
+            if (allFlipped) return;
+            document.querySelectorAll('#flipGrid .flip-card').forEach(card => {
+                card.classList.add('flipped');
+            });
+            checkAllFlipped();
+        }
+
+        // Reset flip state when navigating away from slide 1
+        function resetFlipCards() {
+            allFlipped = false;
+            const btn = document.getElementById('revealBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('done');
+                btn.textContent = '✨ Flip all — see how Kubeflow fixes this';
+            }
+            const wb = document.getElementById('winBar');
+            if (wb) wb.classList.remove('visible');
+            document.querySelectorAll('#flipGrid .flip-card').forEach(card => {
+                card.classList.remove('flipped');
+            });
         }
 
         // Touch/Swipe support
@@ -2559,11 +2788,11 @@
             });
         }
 
-        // Re-animate counters when slide 1 becomes active
+        // Re-animate counters when slide 9 becomes active
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.target.classList.contains('active') && 
-                    mutation.target.dataset.slide === '1') {
+                    mutation.target.dataset.slide === '9') {
                     animateCounters();
                 }
             });
@@ -2597,11 +2826,11 @@
             }, 800);
         }
 
-        // Start training sim when on slide 7 (code example)
+        // Start training sim when on slide 5 (Train & Optimize)
         const simObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.target.classList.contains('active') && 
-                    mutation.target.dataset.slide === '7') {
+                    mutation.target.dataset.slide === '5') {
                     startTrainingSim();
                 }
             });
