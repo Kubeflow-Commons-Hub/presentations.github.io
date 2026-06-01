@@ -3,1630 +3,768 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kubeflow Ecosystem - Animated Architecture</title>
+    <title>Kubeflow — What Can It Do For You?</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
             background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
-            min-height: 100vh;
-            padding: 24px;
-            color: #e0e0e0;
-            overflow-x: hidden;
+            min-height: 100vh; padding: 24px; color: #e0e0e0; overflow-x: hidden;
         }
 
-        /* Animated Background Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 107, 53, 0.6);
-            border-radius: 50%;
-            animation: float 15s infinite;
-        }
-
-        .particle:nth-child(2n) {
-            background: rgba(123, 104, 238, 0.6);
-            animation-duration: 20s;
-        }
-
-        .particle:nth-child(3n) {
-            background: rgba(78, 205, 196, 0.6);
-            animation-duration: 25s;
-        }
-
+        /* ── Background ─────────────────────────────── */
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
+        .particle  { position: absolute; width: 4px; height: 4px; background: rgba(255,107,53,0.6); border-radius: 50%; animation: float 15s infinite; }
+        .particle:nth-child(2n) { background: rgba(123,104,238,0.6); animation-duration: 20s; }
+        .particle:nth-child(3n) { background: rgba(78,205,196,0.6);  animation-duration: 25s; }
         @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(720deg);
-                opacity: 0;
-            }
+            0%,100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10%,90%  { opacity: 1; }
+            100%     { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+        .container { max-width: 1600px; margin: 0 auto; position: relative; z-index: 1; }
 
-        /* Header with Glow Effect */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
+        /* ── Header ─────────────────────────────────── */
+        .header { text-align: center; margin-bottom: 32px; }
         .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.5rem; font-weight: 700;
             background: linear-gradient(135deg, #FF6B35 0%, #7B68EE 50%, #4ECDC4 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-            animation: gradientShift 3s ease infinite;
+            background-size: 200% 200%; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 8px; animation: gradientShift 3s ease infinite;
         }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .header .subtitle {
-            font-size: 1.1rem;
-            color: #888;
-            font-weight: 400;
-        }
-
+        @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .header .subtitle { font-size: 1.1rem; color: #888; }
         .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #7B68EE 0%, #9B59B6 100%);
-            color: white;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 12px;
-            animation: pulse 2s ease-in-out infinite;
+            display: inline-block; background: linear-gradient(135deg,#7B68EE,#9B59B6);
+            color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 600; margin-top: 12px; animation: pulse 2s ease-in-out infinite;
         }
+        @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(123,104,238,0.4); } 50% { box-shadow: 0 0 20px 10px rgba(123,104,238,0.2); } }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(123, 104, 238, 0.4); }
-            50% { box-shadow: 0 0 20px 10px rgba(123, 104, 238, 0.2); }
-        }
+        /* ── Layout ─────────────────────────────────── */
+        .main-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; }
+        .left-column, .right-column { display: flex; flex-direction: column; gap: 20px; }
+        .center-column { display: flex; flex-direction: column; gap: 20px; }
 
-        /* Live Indicator */
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 59, 48, 0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-left: 12px;
-            font-size: 0.75rem;
-            color: #FF3B30;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #FF3B30;
-            border-radius: 50%;
-            animation: livePulse 1s ease-in-out infinite;
-        }
-
-        @keyframes livePulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            gap: 20px;
-        }
-
-        /* Panel Styling with Glow */
+        /* ── Panel ──────────────────────────────────── */
         .panel {
-            background: rgba(30, 30, 50, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+            background: rgba(30,30,50,0.8); backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 20px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            position: relative; overflow: hidden;
         }
-
         .panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            animation: shimmer 3s infinite;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent);
+            animation: shimmer 4s infinite;
         }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
         .panel-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #FF6B35;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
+            font-size: 1rem; font-weight: 700; color: #FF6B35;
+            margin-bottom: 16px; display: flex; align-items: center; gap: 8px; position: relative; z-index: 1;
         }
-
         .panel-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: linear-gradient(180deg, #FF6B35 0%, #FF8A65 100%);
-            border-radius: 2px;
+            content: ''; width: 4px; height: 20px;
+            background: linear-gradient(180deg,#FF6B35,#FF8A65); border-radius: 2px;
             animation: titleGlow 2s ease-in-out infinite;
         }
+        @keyframes titleGlow { 0%,100% { box-shadow: 0 0 5px #FF6B35; } 50% { box-shadow: 0 0 15px #FF6B35, 0 0 30px #FF6B35; } }
 
-        @keyframes titleGlow {
-            0%, 100% { box-shadow: 0 0 5px #FF6B35; }
-            50% { box-shadow: 0 0 15px #FF6B35, 0 0 30px #FF6B35; }
+        /* ── Persona Selector ───────────────────────── */
+        .persona-hint { font-size: 0.73rem; color: #666; margin-bottom: 14px; line-height: 1.4; position: relative; z-index: 1; }
+        .persona-card {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            background: rgba(40,40,60,0.6); border-radius: 12px; border: 2px solid transparent;
+            transition: all 0.3s; cursor: pointer; margin-bottom: 10px; position: relative; z-index: 1;
         }
+        .persona-card:last-of-type { margin-bottom: 0; }
+        .persona-card:hover { transform: translateX(5px); border-color: rgba(255,107,53,0.35); box-shadow: 0 4px 18px rgba(255,107,53,0.15); }
+        .persona-card.selected { border-color: var(--pc,#FF6B35); background: rgba(255,107,53,0.1); transform: translateX(5px); }
+        .persona-card.selected .persona-icon { box-shadow: 0 0 14px var(--pc,#FF6B35); }
+        .persona-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; transition: box-shadow 0.3s; }
+        .persona-icon.leader    { background: linear-gradient(135deg,#E91E63,#F06292); }
+        .persona-icon.scientist { background: linear-gradient(135deg,#4CAF50,#81C784); }
+        .persona-icon.mlops     { background: linear-gradient(135deg,#2196F3,#64B5F6); }
+        .persona-icon.admin     { background: linear-gradient(135deg,#FF9800,#FFB74D); }
+        .persona-info h4 { font-size: 0.88rem; font-weight: 600; color: #fff; }
+        .persona-info p  { font-size: 0.72rem; color: #888; margin-top: 2px; line-height: 1.3; }
+        .persona-clear { font-size: 0.7rem; color: #666; cursor: pointer; text-align: center; margin-top: 10px; padding: 6px; border-radius: 8px; transition: color 0.2s; display: none; position: relative; z-index: 1; }
+        .persona-clear.visible { display: block; }
+        .persona-clear:hover   { color: #FF6B35; }
 
-        /* User Roles */
-        .left-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        /* ── Phase List ─────────────────────────────── */
+        .phase-list { display: flex; flex-direction: column; gap: 7px; position: relative; z-index: 1; }
+        .phase-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+            border-radius: 10px; font-size: 0.79rem; color: #aaa;
+            border-left: 3px solid transparent; transition: all 0.3s;
+            opacity: 0; animation: fadeInUp 0.4s ease-out forwards;
         }
+        .phase-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
+        .phase-dot { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.73rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .phase-pipelines { margin-top: 6px; padding: 8px 10px; background: rgba(25,118,210,0.1); border-radius: 8px; font-size: 0.72rem; color: #64B5F6; }
 
-        .user-role {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(40, 40, 60, 0.6);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .user-role:hover {
-            transform: translateX(8px);
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
-        }
-
-        .user-role::after {
-            content: '';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            background: #4ECDC4;
-            border-radius: 50%;
-            animation: dataPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes dataPulse {
-            0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
-            50% { opacity: 0.3; transform: translateY(-50%) scale(0.5); }
-        }
-
-        .user-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            position: relative;
-        }
-
-        .user-icon.scientist { 
-            background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
-            animation: iconGlow 3s ease-in-out infinite;
-        }
-        .user-icon.mlops { 
-            background: linear-gradient(135deg, #2196F3 0%, #64B5F6 100%);
-            animation: iconGlow 3s ease-in-out infinite 0.5s;
-        }
-        .user-icon.platform { 
-            background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
-            animation: iconGlow 3s ease-in-out infinite 1s;
-        }
-
-        @keyframes iconGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
-        }
-
-        .user-info h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .user-info p {
-            font-size: 0.75rem;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        /* Center Column - Pipeline with Animated Arrows */
-        .center-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .pipeline-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            position: relative;
-        }
-
-        /* Stage Cards */
+        /* ── Stage Cards ────────────────────────────── */
+        .pipeline-flow { display: flex; flex-direction: column; }
         .stage {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            padding: 16px 20px;
-            background: rgba(40, 40, 60, 0.8);
-            border-radius: 12px;
-            margin-bottom: 8px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            z-index: 2;
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 18px 20px; background: rgba(40,40,60,0.8); border-radius: 14px;
+            margin-bottom: 8px; border: 2px solid transparent;
+            transition: all 0.35s; position: relative; z-index: 2;
         }
-
-        .stage:hover {
-            transform: translateX(8px) scale(1.02);
-        }
+        .stage:hover { transform: translateX(5px) scale(1.005); }
+        .stage.dimmed { opacity: 0.22; filter: grayscale(0.5); transform: none !important; pointer-events: none; }
+        .stage.lit    { box-shadow: 0 0 24px rgba(255,107,53,0.2); }
 
         .stage-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
-            position: relative;
+            width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; font-weight: 700; color: white; position: relative;
         }
-
         .stage-number::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid currentColor;
-            animation: numberPing 2s ease-in-out infinite;
-            opacity: 0;
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border-radius: 50%; border: 2px solid currentColor;
+            animation: numberPing 2.5s ease-in-out infinite; opacity: 0;
         }
+        @keyframes numberPing { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.9); opacity: 0; } }
+        .stage-content { flex: 1; min-width: 0; }
 
-        @keyframes numberPing {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.8); opacity: 0; }
+        /* Headline */
+        .stage-headline { font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+
+        /* Value prop */
+        .stage-value { font-size: 0.78rem; color: #aaa; line-height: 1.55; }
+
+        /* Capabilities block — hidden by default, revealed on hover */
+        .cap-block {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 0 14px; margin-top: 0;
+            max-height: 0; overflow: hidden; opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.35s ease, padding 0.3s ease, margin-top 0.3s ease;
         }
-
-        .stage-content {
-            flex: 1;
+        .stage:hover .cap-block,
+        .pipelines-bar:hover .cap-block {
+            max-height: 260px; opacity: 1; padding: 11px 14px; margin-top: 12px;
         }
+        .cap-title { font-size: 0.64rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 9px; }
+        .cap-item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.76rem; color: #c0c0c0; margin-bottom: 6px; line-height: 1.4; }
+        .cap-item:last-child { margin-bottom: 0; }
+        .cap-check { color: #4ECDC4; font-size: 0.75rem; margin-top: 1px; flex-shrink: 0; }
 
-        .stage-title {
-            font-size: 1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
+        /* Hover hint */
+        .hover-hint {
+            font-size: 0.65rem; color: #444; margin-top: 7px;
+            display: flex; align-items: center; gap: 5px; transition: opacity 0.3s;
         }
+        .hover-hint::before { content: ''; width: 12px; height: 1px; background: #444; display: block; }
+        .stage:hover .hover-hint,
+        .pipelines-bar:hover .hover-hint { opacity: 0; pointer-events: none; }
 
-        .stage-desc {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 4px;
+        /* Card footer — always visible */
+        .stage-footer { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .stage-footer .ptag { opacity: 0.75; }
+        .powered-by {
+            display: inline-flex; align-items: center; gap: 4px; font-size: 0.67rem; color: #666;
+            background: rgba(255,255,255,0.06); padding: 3px 9px; border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
         }
+        .powered-by strong { color: #999; }
+        .ptag { font-size: 0.62rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; opacity: 0.8; }
+        .ptag.leader    { background: rgba(233,30,99,0.2);  color: #F06292; }
+        .ptag.scientist { background: rgba(76,175,80,0.2);  color: #81C784; }
+        .ptag.mlops     { background: rgba(33,150,243,0.2); color: #64B5F6; }
+        .ptag.admin     { background: rgba(255,152,0,0.2);  color: #FFB74D; }
 
-        /* Animated Arrow Connector */
-        .arrow-connector {
-            position: relative;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
+        /* Stage colour themes */
+        .stage.s1 { border-color: #F57C00; } .stage.s1 .stage-number { background: linear-gradient(135deg,#E65100,#F57C00); }
+        .stage.s2 { border-color: #7B1FA2; } .stage.s2 .stage-number { background: linear-gradient(135deg,#7B1FA2,#9C27B0); }
+        .stage.s3 { border-color: #E64A19; animation: trainingGlow 3s ease-in-out infinite; background: linear-gradient(135deg,rgba(230,74,25,0.12),rgba(255,87,34,0.06)); }
+        .stage.s3 .stage-number { background: linear-gradient(135deg,#E64A19,#FF5722); }
+        @keyframes trainingGlow { 0%,100% { box-shadow: 0 0 10px rgba(255,107,53,0.25); } 50% { box-shadow: 0 0 28px rgba(255,107,53,0.5), 0 0 55px rgba(255,107,53,0.2); } }
+        .stage.s4 { border-color: #388E3C; } .stage.s4 .stage-number { background: linear-gradient(135deg,#388E3C,#4CAF50); }
+        .stage.s5 { border-color: #F57C00; } .stage.s5 .stage-number { background: linear-gradient(135deg,#F57C00,#FF9800); }
+
+        /* Spark / Feast badges — revealed on hover */
+        .data-sub { display: flex; gap: 8px; margin-top: 0; flex-wrap: wrap; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease; }
+        .stage:hover .data-sub { max-height: 60px; opacity: 1; margin-top: 10px; }
+        .data-badge { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; color: #fff; border: 1px solid rgba(255,255,255,0.15); }
+        .data-badge.spark { background: rgba(229,121,32,0.22); border-color: rgba(229,121,32,0.4); }
+        .data-badge.feast { background: rgba(78,205,196,0.18); border-color: rgba(78,205,196,0.4); }
+
+        /* Frameworks — hidden until hover reveals cap-block, then user can toggle */
+        .fw-toggle {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 11px;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
-
-        .arrow-line {
-            position: absolute;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(180deg, 
-                rgba(255, 107, 53, 0.8) 0%, 
-                rgba(123, 104, 238, 0.8) 50%, 
-                rgba(78, 205, 196, 0.8) 100%);
-            border-radius: 2px;
-        }
-
-        /* Flowing Data Dots */
-        .data-flow {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #FF6B35;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #FF6B35, 0 0 20px #FF6B35;
-            animation: flowDown 1.5s ease-in-out infinite;
-        }
-
-        .data-flow:nth-child(2) {
-            animation-delay: 0.5s;
-            background: #7B68EE;
-            box-shadow: 0 0 10px #7B68EE, 0 0 20px #7B68EE;
-        }
-
-        .data-flow:nth-child(3) {
-            animation-delay: 1s;
-            background: #4ECDC4;
-            box-shadow: 0 0 10px #4ECDC4, 0 0 20px #4ECDC4;
-        }
-
-        @keyframes flowDown {
-            0% { 
-                top: 0%; 
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            20% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            80% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            100% { 
-                top: 100%; 
-                opacity: 0;
-                transform: scale(0.5);
-            }
-        }
-
-        .arrow-head {
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 12px solid #4ECDC4;
-            filter: drop-shadow(0 0 5px #4ECDC4);
-            animation: arrowPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes arrowPulse {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(3px); }
-        }
-
-        /* Stage Colors */
-        .stage.notebooks { border-color: #7B1FA2; }
-        .stage.notebooks .stage-number { background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%); }
-
-        .stage.pipelines { border-color: #1976D2; }
-        .stage.pipelines .stage-number { background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%); }
-
-        .stage.training { border-color: #E64A19; }
-        .stage.training .stage-number { background: linear-gradient(135deg, #E64A19 0%, #FF5722 100%); }
-
-        .stage.katib { border-color: #0097A7; }
-        .stage.katib .stage-number { background: linear-gradient(135deg, #0097A7 0%, #00BCD4 100%); }
-
-        .stage.registry { border-color: #388E3C; }
-        .stage.registry .stage-number { background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%); }
-
-        .stage.kserve { border-color: #F57C00; }
-        .stage.kserve .stage-number { background: linear-gradient(135deg, #F57C00 0%, #FF9800 100%); }
-
-        /* Training Operator Deep Dive */
-        .training-deep-dive {
-            background: linear-gradient(135deg, rgba(230, 74, 25, 0.2) 0%, rgba(255, 87, 34, 0.1) 100%);
-            border: 2px solid #FF6B35;
-            animation: trainingGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes trainingGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(255, 107, 53, 0.6), 0 0 60px rgba(255, 107, 53, 0.3); }
-        }
-
-        .training-components {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .training-component {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            border: 1px solid rgba(255, 107, 53, 0.3);
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .training-component::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: componentShine 2s infinite;
-        }
-
-        @keyframes componentShine {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        .training-component .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: dotPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes dotPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-
-        .dot.job { background: #FF6B35; box-shadow: 0 0 5px #FF6B35; }
-        .dot.runtime { background: #7B68EE; box-shadow: 0 0 5px #7B68EE; }
-        .dot.init { background: #4ECDC4; box-shadow: 0 0 5px #4ECDC4; }
-
-        /* Frameworks Grid with Hover Effects */
-        .frameworks-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .framework {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px;
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #fff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .framework:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .framework-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-            color: white;
-            position: relative;
-        }
-
-        .framework.pytorch .framework-icon { background: #EE4C2C; }
-        .framework.jax .framework-icon { background: #4CAF50; }
+        .stage:hover .fw-toggle { opacity: 1; pointer-events: auto; }
+        /* keep fw-toggle visible once open even if mouse moves slightly */
+        .fw-toggle.open { opacity: 1 !important; pointer-events: auto !important; }
+        .fw-toggle { font-size: 0.72rem; color: #888; cursor: pointer; padding: 5px 10px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; user-select: none; }
+        .fw-toggle:hover { color: #fff; background: rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.3); }
+        
+        .fw-toggle .arrow { transition: transform 0.3s; font-size: 0.6rem; }
+        .fw-toggle.open .arrow { transform: rotate(90deg); }
+        .frameworks-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-top: 10px; display: none; }
+        .frameworks-grid.open { display: grid; }
+        .framework { display: flex; flex-direction: column; align-items: center; padding: 9px; background: rgba(30,30,50,0.8); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.68rem; font-weight: 600; color: #fff; transition: all 0.3s; cursor: pointer; }
+        .framework:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 6px 18px rgba(0,0,0,0.3); }
+        .framework-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; font-size: 0.85rem; }
+        .framework.pytorch    .framework-icon { background: #EE4C2C; }
+        .framework.jax        .framework-icon { background: #4CAF50; }
         .framework.tensorflow .framework-icon { background: #FF6F00; }
-        .framework.mpi .framework-icon { background: #3F51B5; }
-        .framework.deepspeed .framework-icon { background: #1976D2; }
-        .framework.xgboost .framework-icon { background: #43A047; }
-        .framework.mlx .framework-icon { background: #9E9E9E; }
-        .framework.torchtune .framework-icon { background: #E91E63; }
+        .framework.mpi        .framework-icon { background: #3F51B5; }
+        .framework.deepspeed  .framework-icon { background: #1976D2; }
+        .framework.xgboost    .framework-icon { background: #43A047; }
+        .framework.mlx        .framework-icon { background: #9E9E9E; }
+        .framework.huggingface .framework-icon { background: #FF9D00; }
+        .framework.active { animation: frameworkActive 0.5s ease-out forwards; }
+        @keyframes frameworkActive { 0% { background: rgba(255,107,53,0); } 100% { background: rgba(255,107,53,0.2); border-color: #FF6B35; } }
 
-        /* Active Framework Animation */
-        .framework.active {
-            animation: frameworkActive 0.5s ease-out forwards;
+        /* Animated Arrow */
+        .arrow-connector { position: relative; height: 44px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+        .arrow-line { position: absolute; width: 3px; height: 100%; background: linear-gradient(180deg,rgba(255,107,53,0.8),rgba(123,104,238,0.8) 50%,rgba(78,205,196,0.8)); border-radius: 2px; }
+        .data-flow { position: absolute; width: 10px; height: 10px; background: #FF6B35; border-radius: 50%; box-shadow: 0 0 10px #FF6B35, 0 0 20px #FF6B35; animation: flowDown 1.5s ease-in-out infinite; }
+        .data-flow:nth-child(2) { animation-delay: 0.5s; background: #7B68EE; box-shadow: 0 0 10px #7B68EE, 0 0 20px #7B68EE; }
+        .data-flow:nth-child(3) { animation-delay: 1s;   background: #4ECDC4; box-shadow: 0 0 10px #4ECDC4, 0 0 20px #4ECDC4; }
+        @keyframes flowDown { 0% { top:0%; opacity:0; transform:scale(0.5); } 20%,80% { opacity:1; transform:scale(1); } 100% { top:100%; opacity:0; transform:scale(0.5); } }
+        .arrow-head { position: absolute; bottom: 0; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid #4ECDC4; filter: drop-shadow(0 0 5px #4ECDC4); animation: arrowPulse 1s ease-in-out infinite; }
+        @keyframes arrowPulse { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+
+        /* Pipelines bar */
+        .pipelines-bar {
+            margin-top: 8px; border: 2px solid #1976D2; border-radius: 14px; padding: 16px 20px;
+            background: linear-gradient(135deg,rgba(25,118,210,0.14),rgba(33,150,243,0.07));
+            display: flex; align-items: flex-start; gap: 14px;
+            animation: pipelinesGlow 3s ease-in-out infinite; transition: opacity 0.35s, filter 0.35s;
         }
+        .pipelines-bar.dimmed { opacity: 0.22; filter: grayscale(0.5); pointer-events: none; }
+        .pipelines-bar.lit    { box-shadow: 0 0 22px rgba(25,118,210,0.35); }
+        @keyframes pipelinesGlow { 0%,100% { box-shadow: 0 0 10px rgba(25,118,210,0.3); } 50% { box-shadow: 0 0 25px rgba(25,118,210,0.6), 0 0 50px rgba(25,118,210,0.2); } }
+        .pipelines-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+        .pipelines-content { flex: 1; }
+        .pipelines-title { font-size: 0.92rem; font-weight: 700; color: #64B5F6; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
+        .pipelines-badge { font-size: 0.6rem; background: rgba(25,118,210,0.35); color: #90CAF9; padding: 2px 8px; border-radius: 10px; font-weight: 600; letter-spacing: 0.4px; }
+        .pipelines-value { font-size: 0.77rem; color: #888; line-height: 1.5; }
+        .pipelines-dots { display: flex; gap: 4px; align-items: center; margin-top: 4px; }
+        .pipelines-dot { width: 6px; height: 6px; background: #42A5F5; border-radius: 50%; }
+        .pipelines-dot:nth-child(1) { animation: dotPulse 1.5s ease-in-out infinite 0s; }
+        .pipelines-dot:nth-child(2) { animation: dotPulse 1.5s ease-in-out infinite 0.3s; }
+        .pipelines-dot:nth-child(3) { animation: dotPulse 1.5s ease-in-out infinite 0.6s; }
+        @keyframes dotPulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.5); } }
 
-        @keyframes frameworkActive {
-            0% { background: rgba(255, 107, 53, 0); }
-            100% { background: rgba(255, 107, 53, 0.2); border-color: #FF6B35; }
-        }
+        /* ── Right Column ────────────────────────────── */
+        .k8s-infra { background: linear-gradient(135deg,rgba(50,108,229,0.2),rgba(26,77,181,0.1)); border: 2px solid #326CE5; }
+        .k8s-grid  { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+        .k8s-item  { display: flex; flex-direction: column; align-items: center; padding: 12px; background: rgba(30,30,50,0.8); border-radius: 10px; text-align: center; transition: all 0.3s; position: relative; }
+        .k8s-item:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(50,108,229,0.4); }
+        .k8s-item::after { content: ''; position: absolute; top: 5px; right: 5px; width: 6px; height: 6px; background: #4ECDC4; border-radius: 50%; animation: transferPulse 2s ease-in-out infinite; }
+        @keyframes transferPulse { 0%,100% { opacity:0; transform:scale(0); } 50% { opacity:1; transform:scale(1); } }
+        .k8s-icon  { width: 36px; height: 36px; border-radius: 8px; background: #326CE5; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 6px; }
+        .k8s-label { font-size: 0.75rem; font-weight: 600; color: #fff; }
+        .k8s-desc  { font-size: 0.65rem; color: #888; margin-top: 2px; }
+        .gpu-activity { display: flex; gap: 2px; margin-top: 4px; }
+        .gpu-bar { width: 4px; background: linear-gradient(180deg,#76FF03,#43A047); border-radius: 2px; animation: gpuBar 0.5s ease-in-out infinite alternate; }
+        .gpu-bar:nth-child(1) { height: 8px;  animation-delay: 0s; }
+        .gpu-bar:nth-child(2) { height: 12px; animation-delay: 0.1s; }
+        .gpu-bar:nth-child(3) { height: 16px; animation-delay: 0.2s; }
+        .gpu-bar:nth-child(4) { height: 10px; animation-delay: 0.3s; }
+        .gpu-bar:nth-child(5) { height: 14px; animation-delay: 0.4s; }
+        @keyframes gpuBar { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* Right Column */
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* K8s Infrastructure */
-        .k8s-infra {
-            background: linear-gradient(135deg, rgba(50, 108, 229, 0.2) 0%, rgba(26, 77, 181, 0.1) 100%);
-            border: 2px solid #326CE5;
-        }
-
-        .k8s-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .k8s-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px;
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .k8s-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(50, 108, 229, 0.4);
-        }
-
-        /* Data Transfer Animation for K8s items */
-        .k8s-item::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 6px;
-            height: 6px;
-            background: #4ECDC4;
-            border-radius: 50%;
-            animation: transferPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes transferPulse {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        .k8s-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: #326CE5;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-        }
-
-        .k8s-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .k8s-desc {
-            font-size: 0.65rem;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        /* External Integrations */
-        .integrations-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .integration {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(40, 40, 60, 0.6);
-            border-radius: 10px;
-            border-left: 4px solid;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .integration:hover {
-            transform: translateX(5px);
-        }
-
-        /* Data Sync Animation */
-        .integration::after {
-            content: '↔';
-            position: absolute;
-            right: 15px;
-            font-size: 1rem;
-            color: #4ECDC4;
-            animation: syncPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes syncPulse {
-            0%, 100% { opacity: 0.3; transform: scaleX(1); }
-            50% { opacity: 1; transform: scaleX(1.2); }
-        }
-
-        .integration.hf { border-left-color: #FFD21E; }
-        .integration.mlflow { border-left-color: #0194E2; }
-        .integration.s3 { border-left-color: #FF9900; }
+        .integrations-grid { display: flex; flex-direction: column; gap: 10px; }
+        .integration { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(40,40,60,0.6); border-radius: 10px; border-left: 4px solid; transition: all 0.3s; position: relative; overflow: hidden; }
+        .integration:hover { transform: translateX(5px); }
+        .integration::after { content: '↔'; position: absolute; right: 15px; font-size: 1rem; color: #4ECDC4; animation: syncPulse 1.5s ease-in-out infinite; }
+        @keyframes syncPulse { 0%,100% { opacity:0.3; } 50% { opacity:1; } }
+        .integration.hf         { border-left-color: #FFD21E; }
+        .integration.mlflow     { border-left-color: #0194E2; }
+        .integration.s3         { border-left-color: #FF9900; }
         .integration.prometheus { border-left-color: #E6522C; }
+        .integration-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .integration-info h4 { font-size: 0.85rem; font-weight: 600; color: #fff; }
+        .integration-info p  { font-size: 0.7rem; color: #888; }
 
-        .integration-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
+        /* ── Outcomes ────────────────────────────────── */
+        .outcomes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; z-index: 1; }
+        .outcome-card { padding: 14px 12px; border-radius: 12px; background: rgba(40,40,65,0.7); border: 1px solid rgba(255,255,255,0.1); text-align: center; transition: transform 0.3s; }
+        .outcome-card:hover { transform: translateY(-3px); }
+        .outcome-metric { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg,#FF6B35,#7B68EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
+        .outcome-label  { font-size: 0.64rem; color: #888; margin-top: 5px; line-height: 1.3; }
 
-        .integration-info h4 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .integration-info p {
-            font-size: 0.7rem;
-            color: #888;
-        }
-
-        /* SDK Code Block */
-        .code-block {
-            background: #0d0d1a;
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: #d4d4d4;
-            overflow-x: auto;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .code-block::before {
-            content: '● ● ●';
-            position: absolute;
-            top: 8px;
-            left: 12px;
-            font-size: 0.5rem;
-            color: #666;
-            letter-spacing: 4px;
-        }
-
-        .code-content {
-            margin-top: 16px;
-        }
-
-        /* Typing Animation for Code */
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 14px;
-            background: #FF6B35;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-            margin-left: 2px;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* Highlight badge */
-        .highlight-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #FF6B35 0%, #FF8A65 100%);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            margin-left: 8px;
-            animation: badgePulse 2s ease-in-out infinite;
-        }
-
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 5px rgba(255, 107, 53, 0.5); }
-            50% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.8); }
-        }
-
-        /* Connection Lines Between Sections */
-        .connection-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .animated-path {
-            stroke-dasharray: 10;
-            animation: dash 1s linear infinite;
-        }
-
-        @keyframes dash {
-            to {
-                stroke-dashoffset: -20;
-            }
-        }
-
-        /* Legend */
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            margin-top: 24px;
-            padding: 16px;
-            background: rgba(30, 30, 50, 0.8);
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: #888;
-        }
-
-        .legend-flow {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .legend-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: legendDotFlow 1.5s ease-in-out infinite;
-        }
-
+        /* ── Legend ──────────────────────────────────── */
+        .legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 24px; padding: 16px; background: rgba(30,30,50,0.8); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .legend-item  { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #888; }
+        .legend-flow  { display: flex; align-items: center; gap: 4px; }
+        .legend-dot   { width: 8px; height: 8px; border-radius: 50%; animation: legendDotFlow 1.5s ease-in-out infinite; }
         .legend-dot:nth-child(1) { animation-delay: 0s; }
         .legend-dot:nth-child(2) { animation-delay: 0.3s; }
         .legend-dot:nth-child(3) { animation-delay: 0.6s; }
+        @keyframes legendDotFlow { 0%,100% { opacity:0.3; transform:scale(0.8); } 50% { opacity:1; transform:scale(1.2); } }
+        .legend-circle { width: 12px; height: 12px; border-radius: 50%; }
 
-        @keyframes legendDotFlow {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
+        /* ── Footer ──────────────────────────────────── */
+        .footer { text-align: center; margin-top: 24px; color: #666; font-size: 0.8rem; }
+        .footer a { color: #FF6B35; text-decoration: none; }
+
+        /* ── Fixed buttons ───────────────────────────── */
+        .tour-link {
+            position: fixed; bottom: 20px; left: 20px; display: flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg,#FF6B35,#FF8A65); color: white; padding: 14px 24px;
+            border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.95rem;
+            box-shadow: 0 4px 20px rgba(255,107,53,0.4); transition: all 0.3s; z-index: 1000;
+            animation: tourPulse 2s ease-in-out infinite;
         }
-
-        .legend-circle {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        .tour-link:hover { transform: translateY(-3px) scale(1.05); }
+        @keyframes tourPulse { 0%,100% { box-shadow: 0 4px 20px rgba(255,107,53,0.4); } 50% { box-shadow: 0 4px 30px rgba(255,107,53,0.7); } }
+        .fullscreen-btn {
+            position: fixed; top: 15px; right: 15px; z-index: 1000; width: 44px; height: 44px;
+            border-radius: 12px; background: rgba(30,30,50,0.9); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; backdrop-filter: blur(10px);
         }
+        .fullscreen-btn:hover { background: rgba(255,107,53,0.3); border-color: #FF6B35; }
+        .fullscreen-btn .expand { display: block; } .fullscreen-btn .compress { display: none; }
+        :fullscreen .fullscreen-btn .expand { display: none; } :fullscreen .fullscreen-btn .compress { display: block; }
+        :-webkit-full-screen .fullscreen-btn .expand { display: none; } :-webkit-full-screen .fullscreen-btn .compress { display: block; }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 24px;
-            color: #666;
-            font-size: 0.8rem;
-        }
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 1400px) { .main-grid { grid-template-columns: 250px 1fr 280px; gap: 15px; } }
+        @media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr 1fr; gap: 15px; } .center-column { grid-column: span 2; order: 3; } .left-column { order: 1; } .right-column { order: 2; } }
+        @media (max-width: 900px)  { body { padding: 15px; } .main-grid { grid-template-columns: 1fr; } .center-column { order: unset; grid-column: unset; } }
+        @media (max-width: 600px)  { body { padding: 10px; } .header h1 { font-size: 1.6rem; } .header .subtitle { display: none; } .tour-link-text { display: none; } .frameworks-grid { grid-template-columns: repeat(3,1fr); } }
 
-        .footer a {
-            color: #FF6B35;
-            text-decoration: none;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           RESPONSIVE DESIGN
-           ═══════════════════════════════════════════════════════════════ */
-        
-        /* Large tablets and small desktops */
-        @media (max-width: 1400px) {
-            .main-grid {
-                grid-template-columns: 250px 1fr 280px;
-                gap: 15px;
-            }
-        }
-
-        /* Tablets */
-        @media (max-width: 1200px) {
-            .main-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-            }
-            .left-column {
-                order: 1;
-            }
-            .center-column {
-                order: 3;
-                grid-column: span 2;
-            }
-            .right-column {
-                order: 2;
-            }
-        }
-
-        /* Small tablets */
-        @media (max-width: 900px) {
-            body {
-                padding: 15px;
-            }
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            .header .subtitle {
-                font-size: 0.9rem;
-            }
-            .main-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .left-column, .center-column, .right-column {
-                order: unset;
-                grid-column: unset;
-            }
-            .pipeline-stages {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .stage {
-                min-width: 100px;
-            }
-            .frameworks-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* Mobile phones */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .header h1 {
-                font-size: 1.4rem;
-            }
-            .header .subtitle {
-                font-size: 0.8rem;
-                display: none;
-            }
-            .badge {
-                font-size: 0.7rem;
-                padding: 3px 10px;
-            }
-            .live-indicator {
-                display: none;
-            }
-            .panel {
-                padding: 15px;
-            }
-            .panel-title {
-                font-size: 0.9rem;
-            }
-            .stage {
-                min-width: 80px;
-                padding: 12px 8px;
-            }
-            .stage-icon {
-                font-size: 1.3rem;
-            }
-            .stage-name {
-                font-size: 0.65rem;
-            }
-            .stage-desc {
-                display: none;
-            }
-            .frameworks-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-            .framework {
-                padding: 8px;
-            }
-            .framework span:last-child {
-                font-size: 0.6rem;
-            }
-            .user-role {
-                padding: 10px;
-            }
-            .user-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1.1rem;
-            }
-            .user-info h4 {
-                font-size: 0.8rem;
-            }
-            .user-info p {
-                font-size: 0.65rem;
-            }
-            .integration {
-                padding: 10px;
-            }
-            .integration-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-            .integration-info h4 {
-                font-size: 0.75rem;
-            }
-            .integration-info p {
-                font-size: 0.6rem;
-            }
-            .code-block {
-                font-size: 0.6rem;
-                padding: 10px;
-            }
-            .legend {
-                gap: 10px;
-                padding: 12px;
-            }
-            .legend-item {
-                font-size: 0.65rem;
-            }
-            .footer {
-                font-size: 0.7rem;
-            }
-            .k8s-resources {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .k8s-resource {
-                padding: 10px;
-            }
-            .k8s-resource span:first-child {
-                font-size: 1.2rem;
-            }
-            .k8s-resource span:last-child {
-                font-size: 0.6rem;
-            }
-        }
-
-        /* Very small phones */
-        @media (max-width: 380px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-            .frameworks-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .stage {
-                min-width: 70px;
-            }
-        }
-
-        /* GPU Activity Indicator */
-        .gpu-activity {
-            display: flex;
-            gap: 2px;
-            margin-top: 4px;
-        }
-
-        .gpu-bar {
-            width: 4px;
-            height: 16px;
-            background: linear-gradient(180deg, #76FF03 0%, #43A047 100%);
-            border-radius: 2px;
-            animation: gpuBar 0.5s ease-in-out infinite alternate;
-        }
-
-        .gpu-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
-        .gpu-bar:nth-child(2) { animation-delay: 0.1s; height: 12px; }
-        .gpu-bar:nth-child(3) { animation-delay: 0.2s; height: 16px; }
-        .gpu-bar:nth-child(4) { animation-delay: 0.3s; height: 10px; }
-        .gpu-bar:nth-child(5) { animation-delay: 0.4s; height: 14px; }
-
-        @keyframes gpuBar {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
     </style>
 </head>
 <body>
-    <!-- Animated Background Particles -->
-    <div class="particles">
-        <script>
-            for(let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 15) + 's';
-                document.querySelector('.particles').appendChild(particle);
-            }
-        </script>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>What Can Kubeflow Do For You?</h1>
+        <p class="subtitle">Open AI Platform on Kubernetes · From Raw Data to Production</p>
+        <span class="badge">SELECT YOUR ROLE ↓</span>
     </div>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Kubeflow Ecosystem Architecture</h1>
-            <p class="subtitle">End-to-End ML Platform on Kubernetes • From Development to Production</p>
-            <span class="badge">LIVE ARCHITECTURE</span>
-            <span class="live-indicator">
-                <span class="live-dot"></span>
-                DATA FLOWING
-            </span>
-        </div>
+    <div class="main-grid">
 
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Left Column -->
-            <div class="left-column">
-                <!-- User Roles -->
-                <div class="panel">
-                    <div class="panel-title">User Roles</div>
-                    
-                    <div class="user-role">
-                        <div class="user-icon scientist">🧑‍🔬</div>
-                        <div class="user-info">
-                            <h4>Data Scientist</h4>
-                            <p>Python SDK • Jupyter • Models</p>
-                        </div>
-                    </div>
-                    
-                    <div class="user-role" style="margin-top: 10px;">
-                        <div class="user-icon mlops">⚙️</div>
-                        <div class="user-info">
-                            <h4>MLOps Engineer</h4>
-                            <p>YAML • Pipelines • CI/CD</p>
-                        </div>
-                    </div>
-                    
-                    <div class="user-role" style="margin-top: 10px;">
-                        <div class="user-icon platform">🔧</div>
-                        <div class="user-info">
-                            <h4>Platform Admin</h4>
-                            <p>Runtimes • Cluster • RBAC</p>
-                        </div>
-                    </div>
+        <!-- ══ LEFT ══════════════════════════════════════════ -->
+        <div class="left-column">
+
+            <!-- Persona Selector -->
+            <div class="panel">
+                <div class="panel-title">Who are you?</div>
+                <p class="persona-hint">Click your role to highlight what Kubeflow offers you specifically.</p>
+
+                <div class="persona-card" style="--pc:#F06292" onclick="selectPersona('leader',this)">
+                    <div class="persona-icon leader">💼</div>
+                    <div class="persona-info"><h4>Business Leader</h4><p>ROI, governance &amp; time-to-market</p></div>
                 </div>
-
-                <!-- ML Lifecycle with Animation -->
-                <div class="panel">
-                    <div class="panel-title">ML Lifecycle</div>
-                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.1s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #7B1FA2, #9C27B0); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">①</span>
-                            <span>Develop</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.2s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #1976D2, #2196F3); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">②</span>
-                            <span>Orchestrate</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.3s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #E64A19, #FF5722); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">③</span>
-                            <span>Train</span>
-                            <span class="highlight-badge">CORE</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.4s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #0097A7, #00BCD4); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">④</span>
-                            <span>Tune</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.5s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #388E3C, #4CAF50); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">⑤</span>
-                            <span>Register</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeInUp 0.5s ease-out forwards; animation-delay: 0.6s;">
-                            <span style="width: 24px; height: 24px; background: linear-gradient(135deg, #F57C00, #FF9800); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem;">⑥</span>
-                            <span>Serve</span>
-                        </div>
-                    </div>
+                <div class="persona-card" style="--pc:#81C784" onclick="selectPersona('scientist',this)">
+                    <div class="persona-icon scientist">🧑‍🔬</div>
+                    <div class="persona-info"><h4>Data Scientist</h4><p>Experiment, build &amp; iterate fast</p></div>
                 </div>
-
-                <style>
-                    @keyframes fadeInUp {
-                        from {
-                            opacity: 0;
-                            transform: translateY(10px);
-                        }
-                        to {
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
-                    }
-                </style>
+                <div class="persona-card" style="--pc:#64B5F6" onclick="selectPersona('mlops',this)">
+                    <div class="persona-icon mlops">⚙️</div>
+                    <div class="persona-info"><h4>MLOps Engineer</h4><p>Automate, scale &amp; operationalise</p></div>
+                </div>
+                <div class="persona-card" style="--pc:#FFB74D" onclick="selectPersona('admin',this)">
+                    <div class="persona-icon admin">🔧</div>
+                    <div class="persona-info"><h4>Platform Admin</h4><p>Security, compliance &amp; multi-tenancy</p></div>
+                </div>
+                <div class="persona-clear" id="personaClear" onclick="clearPersona()">✕ Clear filter</div>
             </div>
 
-            <!-- Center Column - Main Pipeline -->
-            <div class="center-column">
-                <div class="panel" style="background: linear-gradient(135deg, rgba(30, 30, 50, 0.9) 0%, rgba(40, 40, 60, 0.9) 100%);">
-                    <div class="panel-title">Kubeflow Components Pipeline</div>
-                    
-                    <div class="pipeline-flow">
-                        <!-- Stage 1: Notebooks -->
-                        <div class="stage notebooks">
-                            <div class="stage-number">1</div>
-                            <div class="stage-content">
-                                <div class="stage-title">📓 NOTEBOOKS</div>
-                                <div class="stage-desc">JupyterLab • VSCode • RStudio on Kubernetes</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Animated Arrow -->
-                        <div class="arrow-connector">
-                            <div class="arrow-line"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-
-                        <!-- Stage 2: Pipelines -->
-                        <div class="stage pipelines">
-                            <div class="stage-number">2</div>
-                            <div class="stage-content">
-                                <div class="stage-title">🔀 PIPELINES</div>
-                                <div class="stage-desc">DAG Workflows • Python DSL • Caching • Retry</div>
-                            </div>
-                        </div>
-                        
-                        <div class="arrow-connector">
-                            <div class="arrow-line"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-
-                        <!-- Stage 3: Training Operator -->
-                        <div class="stage training training-deep-dive">
-                            <div class="stage-number">3</div>
-                            <div class="stage-content">
-                                <div class="stage-title">
-                                    🎯 TRAINING OPERATOR
-                                    <span class="highlight-badge">HEART OF KUBEFLOW</span>
-                                </div>
-                                <div class="stage-desc">Distributed Training • 1 GPU to 100s of GPUs</div>
-                                
-                                <div class="training-components">
-                                    <div class="training-component">
-                                        <div class="dot job"></div>
-                                        TrainJob
-                                    </div>
-                                    <div class="training-component">
-                                        <div class="dot runtime"></div>
-                                        ClusterTrainingRuntime
-                                    </div>
-                                    <div class="training-component">
-                                        <div class="dot init"></div>
-                                        Initializers
-                                    </div>
-                                </div>
-                                
-                                <div class="frameworks-grid">
-                                    <div class="framework pytorch" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🔥</div>
-                                        PyTorch
-                                    </div>
-                                    <div class="framework jax" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🧮</div>
-                                        JAX
-                                    </div>
-                                    <div class="framework tensorflow" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">📊</div>
-                                        TensorFlow
-                                    </div>
-                                    <div class="framework mpi" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🖧</div>
-                                        MPI
-                                    </div>
-                                    <div class="framework deepspeed" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">⚡</div>
-                                        DeepSpeed
-                                    </div>
-                                    <div class="framework xgboost" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🌲</div>
-                                        XGBoost
-                                    </div>
-                                    <div class="framework mlx" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🍎</div>
-                                        MLX
-                                    </div>
-                                    <div class="framework torchtune" onclick="this.classList.toggle('active')">
-                                        <div class="framework-icon">🎵</div>
-                                        TorchTune
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="arrow-connector">
-                            <div class="arrow-line"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-
-                        <!-- Stage 4: Katib -->
-                        <div class="stage katib">
-                            <div class="stage-number">4</div>
-                            <div class="stage-content">
-                                <div class="stage-title">🎛️ KATIB</div>
-                                <div class="stage-desc">AutoML • Hyperparameter Tuning • Neural Architecture Search</div>
-                            </div>
-                        </div>
-                        
-                        <div class="arrow-connector">
-                            <div class="arrow-line"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-
-                        <!-- Stage 5: Model Registry -->
-                        <div class="stage registry">
-                            <div class="stage-number">5</div>
-                            <div class="stage-content">
-                                <div class="stage-title">📦 MODEL REGISTRY</div>
-                                <div class="stage-desc">Version Control • Lineage • Metadata • Reproducibility</div>
-                            </div>
-                        </div>
-                        
-                        <div class="arrow-connector">
-                            <div class="arrow-line"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="data-flow"></div>
-                            <div class="arrow-head"></div>
-                        </div>
-
-                        <!-- Stage 6: KServe -->
-                        <div class="stage kserve">
-                            <div class="stage-number">6</div>
-                            <div class="stage-content">
-                                <div class="stage-title">🚀 KSERVE</div>
-                                <div class="stage-desc">Serverless Inference • Auto-scale • Canary Deployments</div>
-                            </div>
-                        </div>
+            <!-- AI Lifecycle -->
+            <div class="panel">
+                <div class="panel-title">AI Lifecycle</div>
+                <div class="phase-list">
+                    <div class="phase-item" style="border-left-color:#F57C00; animation-delay:0.05s;">
+                        <div class="phase-dot" style="background:#F57C00;">1</div><span>Prepare Data</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="right-column">
-                <!-- Kubernetes Infrastructure -->
-                <div class="panel k8s-infra">
-                    <div class="panel-title" style="color: #64B5F6;">☸️ Kubernetes Infrastructure</div>
-                    <div class="k8s-grid">
-                        <div class="k8s-item">
-                            <div class="k8s-icon">📋</div>
-                            <div class="k8s-label">JobSet</div>
-                            <div class="k8s-desc">Job Orchestration</div>
-                        </div>
-                        <div class="k8s-item">
-                            <div class="k8s-icon">📊</div>
-                            <div class="k8s-label">Kueue</div>
-                            <div class="k8s-desc">Resource Queuing</div>
-                        </div>
-                        <div class="k8s-item">
-                            <div class="k8s-icon">🎮</div>
-                            <div class="k8s-label">GPUs</div>
-                            <div class="k8s-desc">NVIDIA • AMD</div>
-                            <div class="gpu-activity">
-                                <div class="gpu-bar"></div>
-                                <div class="gpu-bar"></div>
-                                <div class="gpu-bar"></div>
-                                <div class="gpu-bar"></div>
-                                <div class="gpu-bar"></div>
-                            </div>
-                        </div>
-                        <div class="k8s-item">
-                            <div class="k8s-icon">💾</div>
-                            <div class="k8s-label">Storage</div>
-                            <div class="k8s-desc">PVC • NFS • S3</div>
-                        </div>
-                        <div class="k8s-item">
-                            <div class="k8s-icon">🌐</div>
-                            <div class="k8s-label">Services</div>
-                            <div class="k8s-desc">Headless • LB</div>
-                        </div>
-                        <div class="k8s-item">
-                            <div class="k8s-icon">🌋</div>
-                            <div class="k8s-label">Volcano</div>
-                            <div class="k8s-desc">Gang Scheduling</div>
-                        </div>
+                    <div class="phase-item" style="border-left-color:#9C27B0; animation-delay:0.15s;">
+                        <div class="phase-dot" style="background:#9C27B0;">2</div><span>Experiment</span>
                     </div>
-                </div>
-
-                <!-- External Integrations -->
-                <div class="panel">
-                    <div class="panel-title" style="color: #CE93D8;">🔗 External Integrations</div>
-                    <div class="integrations-grid">
-                        <div class="integration hf">
-                            <div class="integration-icon">🤗</div>
-                            <div class="integration-info">
-                                <h4>HuggingFace</h4>
-                                <p>Models • Datasets • Tokenizers</p>
-                            </div>
-                        </div>
-                        <div class="integration mlflow">
-                            <div class="integration-icon">📈</div>
-                            <div class="integration-info">
-                                <h4>MLflow</h4>
-                                <p>Experiment Tracking • Artifacts</p>
-                            </div>
-                        </div>
-                        <div class="integration s3">
-                            <div class="integration-icon">☁️</div>
-                            <div class="integration-info">
-                                <h4>S3 / MinIO</h4>
-                                <p>Object Storage • Checkpoints</p>
-                            </div>
-                        </div>
-                        <div class="integration prometheus">
-                            <div class="integration-icon">📊</div>
-                            <div class="integration-info">
-                                <h4>Prometheus</h4>
-                                <p>Metrics • Monitoring</p>
-                            </div>
-                        </div>
+                    <div class="phase-item" style="border-left-color:#FF5722; animation-delay:0.25s;">
+                        <div class="phase-dot" style="background:#FF5722;">3</div><span>Train &amp; Optimize</span>
                     </div>
-                </div>
-
-                <!-- SDK Code -->
-                <div class="panel">
-                    <div class="panel-title" style="color: #81C784;">🐍 Python SDK</div>
-                    <div class="code-block">
-                        <div class="code-content">
-                            <span style="color: #569cd6;">from</span> kubeflow.trainer <span style="color: #569cd6;">import</span> TrainingClient<br><br>
-                            <span style="color: #6a9955;"># Zero-code LLM fine-tuning</span><br>
-                            client.train(<br>
-                            &nbsp;&nbsp;model=<span style="color: #ce9178;">"meta-llama/Llama-3.2-1B"</span>,<br>
-                            &nbsp;&nbsp;dataset=<span style="color: #ce9178;">"tatsu-lab/alpaca"</span>,<br>
-                            &nbsp;&nbsp;num_nodes=<span style="color: #b5cea8;">4</span><br>
-                            )<span class="typing-cursor"></span>
-                        </div>
+                    <div class="phase-item" style="border-left-color:#4CAF50; animation-delay:0.35s;">
+                        <div class="phase-dot" style="background:#4CAF50;">4</div><span>Govern Models</span>
+                    </div>
+                    <div class="phase-item" style="border-left-color:#FF9800; animation-delay:0.45s;">
+                        <div class="phase-dot" style="background:#FF9800;">5</div><span>Deploy &amp; Serve</span>
+                    </div>
+                    <div class="phase-item phase-pipelines" style="border-left-color:#1976D2; animation-delay:0.55s;">
+                        <div class="phase-dot" style="background:#1976D2;">🔀</div>
+                        <span style="font-size:0.72rem; color:#64B5F6;">Pipelines orchestrate all phases</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Legend -->
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-flow">
-                    <div class="legend-dot" style="background: #FF6B35;"></div>
-                    <div class="legend-dot" style="background: #7B68EE;"></div>
-                    <div class="legend-dot" style="background: #4ECDC4;"></div>
-                </div>
-                <span>Data Flow</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-circle" style="background: #FF6B35;"></div>
-                <span>Training Operator</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-circle" style="background: #326CE5;"></div>
-                <span>Kubernetes Native</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-circle" style="background: #9C27B0;"></div>
-                <span>External Integration</span>
-            </div>
-            <div class="legend-item">
-                <div class="gpu-activity" style="transform: scale(0.8);">
-                    <div class="gpu-bar"></div>
-                    <div class="gpu-bar"></div>
-                    <div class="gpu-bar"></div>
-                </div>
-                <span>GPU Activity</span>
+        <!-- ══ CENTER ═════════════════════════════════════════ -->
+        <div class="center-column">
+            <div class="panel" style="background:linear-gradient(135deg,rgba(30,30,50,0.92),rgba(40,40,62,0.92));">
+                <div class="panel-title">Platform Capabilities</div>
+                <div class="pipeline-flow">
+
+                    <!-- Stage 1 — Prepare Data -->
+                    <div class="stage s1" id="stage-data" data-personas="scientist,mlops,admin">
+                        <div class="stage-number">1</div>
+                        <div class="stage-content">
+                            <div class="stage-headline">⚙️ PREPARE YOUR DATA</div>
+                            <div class="stage-value">Transform raw data into AI-ready features at any scale and build a shared feature store every team can reuse — with zero training-serving skew.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="data-sub">
+                                <div class="data-badge spark">⚡ Apache Spark</div>
+                                <div class="data-badge feast">🏪 Feast Feature Store</div>
+                            </div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Process petabytes of raw data with distributed Spark jobs</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Build a centralised feature store shared across every AI project</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Guarantee identical features between training and live serving</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Versioned, governed datasets with full lineage</div>
+                            </div>
+                            <div class="stage-footer">
+                                <span class="powered-by">Powered by: <strong>Apache Spark · Feast</strong></span>
+                                <span class="ptag scientist">Data Scientist</span>
+                                <span class="ptag mlops">MLOps</span>
+                                <span class="ptag admin">Platform Admin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-connector">
+                        <div class="arrow-line"></div>
+                        <div class="data-flow"></div><div class="data-flow"></div><div class="data-flow"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+
+                    <!-- Stage 2 — Experiment -->
+                    <div class="stage s2" id="stage-notebooks" data-personas="scientist">
+                        <div class="stage-number">2</div>
+                        <div class="stage-content">
+                            <div class="stage-headline">📓 EXPERIMENT WITHOUT LIMITS</div>
+                            <div class="stage-value">Data scientists get on-demand, GPU-backed workspaces in seconds — no IT tickets, no environment setup, no waiting.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>JupyterLab, VSCode, or RStudio — your IDE, on the cluster</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Instant access to GPUs, storage, and shared data</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Reproducible environments versioned alongside code</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Collaborate and share notebooks across the team</div>
+                            </div>
+                            <div class="stage-footer">
+                                <span class="powered-by">Powered by: <strong>Kubeflow Notebooks</strong></span>
+                                <span class="ptag scientist">Data Scientist</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-connector">
+                        <div class="arrow-line"></div>
+                        <div class="data-flow"></div><div class="data-flow"></div><div class="data-flow"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+
+                    <!-- Stage 3 — Train & Optimize -->
+                    <div class="stage s3" id="stage-training" data-personas="scientist,mlops,leader">
+                        <div class="stage-number">3</div>
+                        <div class="stage-content">
+                            <div class="stage-headline">🚀 TRAIN &amp; OPTIMIZE YOUR AI MODELS</div>
+                            <div class="stage-value">Fine-tune any LLM or ML model on your proprietary data and let AutoML find the best configuration — scaling from 1 GPU to thousands without touching infrastructure.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Fine-tune LLMs on proprietary data in a single API call</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Scale from 1 GPU to 1,000s — no code changes needed</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>AutoML (Katib) automatically finds optimal hyperparameters</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Built-in support for PyTorch, TensorFlow, JAX, DeepSpeed &amp; more</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Fair GPU sharing across teams with Kueue queuing</div>
+                            </div>
+
+                            <!-- Collapsible Frameworks -->
+                            <div class="fw-toggle" id="fwToggle" onclick="toggleFrameworks()">
+                                <span class="arrow">▶</span> Supported Frameworks
+                                <span style="background:rgba(255,255,255,0.1); padding:1px 7px; border-radius:8px; font-size:0.62rem;">8</span>
+                            </div>
+                            <div class="frameworks-grid" id="frameworksGrid">
+                                <div class="framework pytorch"    onclick="this.classList.toggle('active')"><div class="framework-icon">🔥</div>PyTorch</div>
+                                <div class="framework jax"        onclick="this.classList.toggle('active')"><div class="framework-icon">🧮</div>JAX</div>
+                                <div class="framework tensorflow" onclick="this.classList.toggle('active')"><div class="framework-icon">📊</div>TensorFlow</div>
+                                <div class="framework mpi"        onclick="this.classList.toggle('active')"><div class="framework-icon">🖧</div>MPI</div>
+                                <div class="framework deepspeed"  onclick="this.classList.toggle('active')"><div class="framework-icon">⚡</div>DeepSpeed</div>
+                                <div class="framework xgboost"    onclick="this.classList.toggle('active')"><div class="framework-icon">🌲</div>XGBoost</div>
+                                <div class="framework mlx"        onclick="this.classList.toggle('active')"><div class="framework-icon">🍎</div>MLX</div>
+                                <div class="framework huggingface" onclick="this.classList.toggle('active')"><div class="framework-icon">🤗</div>HuggingFace</div>
+                            </div>
+
+                            <div class="stage-footer">
+                                <span class="powered-by">Powered by: <strong>Kubeflow Trainer v2 · Katib</strong></span>
+                                <span class="ptag scientist">Data Scientist</span>
+                                <span class="ptag mlops">MLOps</span>
+                                <span class="ptag leader">Business Leader</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-connector">
+                        <div class="arrow-line"></div>
+                        <div class="data-flow"></div><div class="data-flow"></div><div class="data-flow"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+
+                    <!-- Stage 4 — Govern -->
+                    <div class="stage s4" id="stage-registry" data-personas="leader,mlops,admin">
+                        <div class="stage-number">4</div>
+                        <div class="stage-content">
+                            <div class="stage-headline">📦 GOVERN EVERY MODEL</div>
+                            <div class="stage-value">Know exactly what is in production, why it was deployed, and who approved it — full audit trail, version history, and lineage for every model.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Version every model with full metadata, tags, and lineage</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Trace exactly which data and code produced each model</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Approval workflows and compliance audit trail built in</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Reproduce any past result with a single command</div>
+                            </div>
+                            <div class="stage-footer">
+                                <span class="powered-by">Powered by: <strong>Model Registry</strong></span>
+                                <span class="ptag leader">Business Leader</span>
+                                <span class="ptag mlops">MLOps</span>
+                                <span class="ptag admin">Platform Admin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-connector">
+                        <div class="arrow-line"></div>
+                        <div class="data-flow"></div><div class="data-flow"></div><div class="data-flow"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+
+                    <!-- Stage 5 — Serve -->
+                    <div class="stage s5" id="stage-kserve" data-personas="leader,mlops,admin">
+                        <div class="stage-number">5</div>
+                        <div class="stage-content">
+                            <div class="stage-headline">🌐 DEPLOY TO PRODUCTION, INSTANTLY</div>
+                            <div class="stage-value">Go from model registry to a live, production-grade endpoint in minutes — auto-scaling with demand, with zero-downtime rollouts.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Registry-to-endpoint deployment in under 5 minutes</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Auto-scales from zero to millions of requests automatically</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>A/B testing and canary rollouts with instant rollback</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Serverless — pay only for inference you actually use</div>
+                            </div>
+                            <div class="stage-footer">
+                                <span class="powered-by">Powered by: <strong>KServe</strong></span>
+                                <span class="ptag leader">Business Leader</span>
+                                <span class="ptag mlops">MLOps</span>
+                                <span class="ptag admin">Platform Admin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pipelines bar -->
+                    <div class="pipelines-bar" id="stage-pipelines" data-personas="mlops,admin,leader">
+                        <div class="pipelines-icon">🔀</div>
+                        <div class="pipelines-content">
+                            <div class="pipelines-title">
+                                AUTOMATE THE ENTIRE AI LIFECYCLE
+                                <span class="pipelines-badge">ORCHESTRATOR</span>
+                            </div>
+                            <div class="pipelines-value">Define the full pipeline once as code — automatic retries, caching, dependency resolution, and a complete run history for every execution.</div>
+                            <div class="hover-hint">Hover to see capabilities</div>
+                            <div class="cap-block">
+                                <div class="cap-title">Key Capabilities</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Drag-and-drop DAG builder or Python DSL — your choice</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Automatic step caching cuts re-run costs by up to 80%</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Full audit log of every pipeline run, version, and output</div>
+                                <div class="cap-item"><span class="cap-check">✓</span>Integrates with any CI/CD system (GitHub Actions, Tekton, etc.)</div>
+                            </div>
+                            <div class="stage-footer" style="margin-top:10px;">
+                                <span class="powered-by">Powered by: <strong>Kubeflow Pipelines</strong></span>
+                                <span class="ptag leader">Business Leader</span>
+                                <span class="ptag mlops">MLOps</span>
+                                <span class="ptag admin">Platform Admin</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:4px; align-items:center; flex-shrink:0;">
+                            <div class="pipelines-dot"></div>
+                            <div class="pipelines-dot"></div>
+                            <div class="pipelines-dot"></div>
+                        </div>
+                    </div>
+
+                </div><!-- /pipeline-flow -->
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <p>Kubeflow Trainer v2.0 • <a href="https://www.kubeflow.org">kubeflow.org</a> • Made with ❤️ by the Kubeflow Community</p>
+        <!-- ══ RIGHT ══════════════════════════════════════════ -->
+        <div class="right-column">
+
+            <!-- K8s Infrastructure -->
+            <div class="panel k8s-infra">
+                <div class="panel-title" style="color:#64B5F6;">☸️ Kubernetes Infrastructure</div>
+                <div class="k8s-grid">
+                    <div class="k8s-item"><div class="k8s-icon">📋</div><div class="k8s-label">JobSet</div><div class="k8s-desc">Job Orchestration</div></div>
+                    <div class="k8s-item"><div class="k8s-icon">📊</div><div class="k8s-label">Kueue</div><div class="k8s-desc">Resource Queuing</div></div>
+                    <div class="k8s-item">
+                        <div class="k8s-icon">🎮</div><div class="k8s-label">GPUs</div><div class="k8s-desc">NVIDIA · AMD</div>
+                        <div class="gpu-activity"><div class="gpu-bar"></div><div class="gpu-bar"></div><div class="gpu-bar"></div><div class="gpu-bar"></div><div class="gpu-bar"></div></div>
+                    </div>
+                    <div class="k8s-item"><div class="k8s-icon">💾</div><div class="k8s-label">Storage</div><div class="k8s-desc">PVC · NFS · S3</div></div>
+                    <div class="k8s-item"><div class="k8s-icon">🌐</div><div class="k8s-label">Services</div><div class="k8s-desc">Headless · LB</div></div>
+                    <div class="k8s-item"><div class="k8s-icon">🌋</div><div class="k8s-label">Volcano</div><div class="k8s-desc">Gang Scheduling</div></div>
+                </div>
+            </div>
+
+            <!-- Integrations -->
+            <div class="panel">
+                <div class="panel-title" style="color:#CE93D8;">🔗 Ecosystem Integrations</div>
+                <div class="integrations-grid">
+                    <div class="integration hf">
+                        <div class="integration-icon">🤗</div>
+                        <div class="integration-info"><h4>HuggingFace</h4><p>Models · Datasets · Tokenizers</p></div>
+                    </div>
+                    <div class="integration mlflow">
+                        <div class="integration-icon">📈</div>
+                        <div class="integration-info"><h4>MLflow</h4><p>Experiment Tracking · Artifacts</p></div>
+                    </div>
+                    <div class="integration s3">
+                        <div class="integration-icon">☁️</div>
+                        <div class="integration-info"><h4>S3 / MinIO</h4><p>Object Storage · Checkpoints</p></div>
+                    </div>
+                    <div class="integration prometheus">
+                        <div class="integration-icon">📊</div>
+                        <div class="integration-info"><h4>Prometheus</h4><p>Metrics · Monitoring</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Outcomes -->
+            <div class="panel">
+                <div class="panel-title" style="color:#81C784;">📈 Business Outcomes</div>
+                <div class="outcomes-grid">
+                    <div class="outcome-card"><div class="outcome-metric">10×</div><div class="outcome-label">Faster model development cycle</div></div>
+                    <div class="outcome-card"><div class="outcome-metric">100%</div><div class="outcome-label">Audit trail &amp; compliance</div></div>
+                    <div class="outcome-card"><div class="outcome-metric">∞</div><div class="outcome-label">Scale without code changes</div></div>
+                    <div class="outcome-card"><div class="outcome-metric">0</div><div class="outcome-label">Vendor lock-in — CNCF open source</div></div>
+                </div>
+            </div>
+
         </div>
+    </div><!-- /main-grid -->
+
+    <!-- Legend -->
+    <div class="legend">
+        <div class="legend-item"><div class="legend-flow"><div class="legend-dot" style="background:#FF6B35;"></div><div class="legend-dot" style="background:#7B68EE;"></div><div class="legend-dot" style="background:#4ECDC4;"></div></div><span>Data Flow</span></div>
+        <div class="legend-item"><div class="legend-circle" style="background:#F57C00;"></div><span>Spark + Feast</span></div>
+        <div class="legend-item"><div class="legend-circle" style="background:#FF6B35;"></div><span>Kubeflow Trainer</span></div>
+        <div class="legend-item"><div class="legend-circle" style="background:#326CE5;"></div><span>Kubernetes Native</span></div>
+        <div class="legend-item"><div class="legend-circle" style="background:#9C27B0;"></div><span>External Integration</span></div>
     </div>
 
-    <!-- Live Tour Link -->
-    <a href="kubeflow-ecosystem-tour.html" class="tour-link">
-        <span class="tour-link-icon">🎬</span>
-        <span class="tour-link-text">Interactive Tour</span>
-    </a>
+    <div class="footer">
+        <p>Kubeflow · <a href="https://www.kubeflow.org">kubeflow.org</a> · CNCF Incubating Project · Apache Spark · Feast Feature Store</p>
+    </div>
+</div><!-- /container -->
 
-    <!-- Fullscreen Button -->
-    <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)">
-        <span class="expand">⛶</span>
-        <span class="compress">⛶</span>
-    </button>
+<a href="kubeflow-ecosystem-tour.html" class="tour-link">
+    <span>🎬</span><span class="tour-link-text">Interactive Tour</span>
+</a>
+<button class="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">
+    <span class="expand">⛶</span><span class="compress">⛶</span>
+</button>
 
-    <style>
-        .tour-link {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #FF6B35, #FF8A65);
-            color: white;
-            padding: 14px 24px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            animation: tourLinkPulse 2s ease-in-out infinite;
+<script>
+    // ── Particles ──────────────────────────────────────
+    (function () {
+        const c = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay    = Math.random() * 15 + 's';
+            p.style.animationDuration = (15 + Math.random() * 15) + 's';
+            c.appendChild(p);
         }
+    })();
 
-        .tour-link:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
-        }
+    // ── Persona Selector ───────────────────────────────
+    const PERSONA_STAGES = {
+        leader:    ['stage-training', 'stage-registry', 'stage-kserve', 'stage-pipelines'],
+        scientist: ['stage-data', 'stage-notebooks', 'stage-training'],
+        mlops:     ['stage-data', 'stage-training', 'stage-registry', 'stage-kserve', 'stage-pipelines'],
+        admin:     ['stage-data', 'stage-registry', 'stage-kserve', 'stage-pipelines'],
+    };
+    const ALL_STAGES = ['stage-data','stage-notebooks','stage-training','stage-registry','stage-kserve','stage-pipelines'];
+    let activePersona = null;
 
-        .tour-link-icon {
-            font-size: 1.2rem;
-        }
-
-        @keyframes tourLinkPulse {
-            0%, 100% { box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4); }
-            50% { box-shadow: 0 4px 30px rgba(255, 107, 53, 0.7); }
-        }
-
-        @media (max-width: 600px) {
-            .tour-link {
-                padding: 12px 18px;
-                font-size: 0.85rem;
-            }
-            .tour-link-text {
-                display: none;
-            }
-        }
-
-        /* Fullscreen Button */
-        .fullscreen-btn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 1000;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(30, 30, 50, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .fullscreen-btn:hover {
-            background: rgba(255, 107, 53, 0.3);
-            border-color: #FF6B35;
-            transform: scale(1.05);
-        }
-
-        .fullscreen-btn .expand { display: block; }
-        .fullscreen-btn .compress { display: none; }
-
-        :fullscreen .fullscreen-btn .expand { display: none; }
-        :fullscreen .fullscreen-btn .compress { display: block; }
-
-        :-webkit-full-screen .fullscreen-btn .expand { display: none; }
-        :-webkit-full-screen .fullscreen-btn .compress { display: block; }
-    </style>
-
-    <script>
-        // Auto-activate frameworks randomly to show activity
-        setInterval(() => {
-            const frameworks = document.querySelectorAll('.framework');
-            const randomIndex = Math.floor(Math.random() * frameworks.length);
-            frameworks.forEach((f, i) => {
-                if (i === randomIndex) {
-                    f.classList.add('active');
-                    setTimeout(() => f.classList.remove('active'), 2000);
-                }
-            });
-        }, 3000);
-
-        // Fullscreen functionality
-        function toggleFullscreen() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
-            }
-        }
-
-        // Keyboard shortcut
-        document.addEventListener('keydown', e => {
-            if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+    function selectPersona(id, card) {
+        if (activePersona === id) { clearPersona(); return; }
+        activePersona = id;
+        document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        document.getElementById('personaClear').classList.add('visible');
+        const active = PERSONA_STAGES[id];
+        ALL_STAGES.forEach(sid => {
+            const el = document.getElementById(sid);
+            if (!el) return;
+            if (active.includes(sid)) { el.classList.remove('dimmed'); el.classList.add('lit'); }
+            else                      { el.classList.remove('lit');   el.classList.add('dimmed'); }
         });
-    </script>
+    }
+
+    function clearPersona() {
+        activePersona = null;
+        document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+        document.getElementById('personaClear').classList.remove('visible');
+        ALL_STAGES.forEach(sid => {
+            const el = document.getElementById(sid);
+            if (el) el.classList.remove('dimmed', 'lit');
+        });
+    }
+
+    // ── Frameworks toggle ──────────────────────────────
+    function toggleFrameworks() {
+        const grid   = document.getElementById('frameworksGrid');
+        const toggle = document.getElementById('fwToggle');
+        grid.classList.toggle('open');
+        toggle.classList.toggle('open');
+    }
+
+    // ── Random framework activity ──────────────────────
+    setInterval(() => {
+        const fw  = document.querySelectorAll('.framework');
+        const idx = Math.floor(Math.random() * fw.length);
+        fw.forEach((f, i) => {
+            if (i === idx) { f.classList.add('active'); setTimeout(() => f.classList.remove('active'), 2000); }
+        });
+    }, 3000);
+
+    // ── Fullscreen ─────────────────────────────────────
+    function toggleFullscreen() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            const e = document.documentElement;
+            if (e.requestFullscreen) e.requestFullscreen();
+            else if (e.webkitRequestFullscreen) e.webkitRequestFullscreen();
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'f' || e.key === 'F') toggleFullscreen(); });
+</script>
+
 </body>
 </html>
-
